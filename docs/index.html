@@ -211,8 +211,8 @@
             <div class="feature-icon feature-icon-blue">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
             </div>
-            <h3>15 Slash Commands</h3>
-            <p><code>/install-global</code>, <code>/setup</code>, <code>/diagram</code>, <code>/review</code>, <code>/commit</code>, <code>/progress</code>, <code>/test-plan</code>, <code>/architecture</code>, <code>/new-project</code>, <code>/security-check</code>, <code>/optimize-docker</code>, <code>/create-e2e</code>, <code>/worktree</code>, <code>/what-is-my-ai-doing</code>, <code>/refactor</code></p>
+            <h3>16 Slash Commands</h3>
+            <p><code>/install-global</code>, <code>/setup</code>, <code>/diagram</code>, <code>/review</code>, <code>/commit</code>, <code>/progress</code>, <code>/test-plan</code>, <code>/architecture</code>, <code>/new-project</code>, <code>/security-check</code>, <code>/optimize-docker</code>, <code>/create-e2e</code>, <code>/create-api</code>, <code>/worktree</code>, <code>/what-is-my-ai-doing</code>, <code>/refactor</code></p>
           </div>
 
           <div class="feature-card">
@@ -244,7 +244,7 @@
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
             </div>
             <h3>Testing Templates</h3>
-            <p>Master test checklist, issue tracking log, and a singleton database wrapper that prevents connection pool explosion.</p>
+            <p>Master test checklist, issue tracking log, and a singleton database wrapper that prevents connection pool explosion. All inputs are auto-sanitized against NoSQL injection.</p>
           </div>
         </div>
       </section>
@@ -299,7 +299,7 @@ cp .claude/hooks/rulecatch-check.sh ~/.claude/hooks/</code></pre>
               <li>Run <code>/diagram all</code> &mdash; Auto-generate architecture, API, database, and infrastructure diagrams</li>
               <li>Edit <code>CLAUDE.local.md</code> &mdash; Add your personal preferences</li>
             </ol>
-            <p>The database wrapper (<code>src/core/db/index.ts</code>) works out of the box &mdash; just set <code>DATABASE_URL</code> in your <code>.env</code> and it connects to MongoDB automatically.</p>
+            <p>The database wrapper (<code>src/core/db/index.ts</code>) works out of the box &mdash; just set <code>DATABASE_URL</code> in your <code>.env</code> and it connects to MongoDB automatically. All query inputs are auto-sanitized against NoSQL injection (configurable via <code>DB_SANITIZE_INPUTS=false</code> or <code>sanitize = false</code> in conf).</p>
           </div>
         </div>
 
@@ -331,6 +331,7 @@ cp .claude/hooks/rulecatch-check.sh ~/.claude/hooks/</code></pre>
 │   │   ├── security-check.md    # /security-check — scan for secrets
 │   │   ├── optimize-docker.md   # /optimize-docker — Docker best practices
 │   │   ├── create-e2e.md        # /create-e2e — generate E2E tests
+│   │   ├── create-api.md        # /create-api — scaffold API endpoints
 │   │   ├── worktree.md          # /worktree — isolated task branches
 │   │   ├── what-is-my-ai-doing.md # /what-is-my-ai-doing — live AI monitor
 │   │   ├── setup.md             # /setup — interactive .env configuration
@@ -496,6 +497,7 @@ WRONG:   /api/users</code></pre>
             <ul>
               <li>NEVER create direct database connections outside <code>src/core/db/</code></li>
               <li>ALWAYS use the centralized database wrapper</li>
+              <li>All inputs auto-sanitized against NoSQL injection (disable with <code>DB_SANITIZE_INPUTS=false</code>)</li>
               <li>One connection pool. One place to change. One place to mock.</li>
             </ul>
           </div>
@@ -849,6 +851,18 @@ npx @rulecatch/ai-pooler@latest monitor -v</code></pre>
           <div class="command-card">
             <h3><code>/create-e2e</code></h3>
             <p class="command-desc">Generates a properly structured Playwright E2E test for a feature. Reads the source code, identifies URLs/elements/data to verify, creates the test at <code>tests/e2e/[name].spec.ts</code> with happy path, error cases, and edge cases. Verifies the test meets the &ldquo;done&rdquo; checklist (URL assertion, visibility assertion, data assertion, error case, no TODOs) before finishing.</p>
+          </div>
+
+          <div class="command-card">
+            <h3><code>/create-api</code></h3>
+            <p class="command-desc">Scaffolds a production-ready API endpoint with full CRUD:</p>
+            <ul>
+              <li><strong>Types</strong> &mdash; <code>src/types/&lt;resource&gt;.ts</code> (document, request, response shapes)</li>
+              <li><strong>Handler</strong> &mdash; <code>src/handlers/&lt;resource&gt;.ts</code> (business logic, indexes, CRUD)</li>
+              <li><strong>Route</strong> &mdash; <code>src/routes/v1/&lt;resource&gt;.ts</code> (thin routes, proper HTTP status codes)</li>
+              <li><strong>Tests</strong> &mdash; <code>tests/unit/&lt;resource&gt;.test.ts</code> (happy path, error cases, edge cases)</li>
+            </ul>
+            <p>Uses the db wrapper with shared pool, auto-sanitized inputs, pagination (max 100), registered indexes, and <code>/api/v1/</code> prefix. Pass <code>--no-mongo</code> to skip MongoDB integration.</p>
           </div>
 
           <div class="command-card">

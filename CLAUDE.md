@@ -47,6 +47,8 @@
 | `/worktree <name>` | Create isolated branch + worktree for a task (never touch main) |
 | **Code Quality** | |
 | `/refactor <file>` | Audit + refactor a file against all CLAUDE.md rules (split, type, extract, clean) |
+| **API** | |
+| `/create-api <resource>` | Scaffold a full API endpoint — route, handler, types, tests — wired into the server |
 | **Documentation** | |
 | `/diagram <type>` | Generate diagrams from actual code: `architecture`, `api`, `database`, `infrastructure`, `all` |
 | **Utility** | |
@@ -87,6 +89,9 @@ Every API endpoint MUST use `/api/v1/` prefix. No exceptions.
 - NEVER import `mongodb` directly in any file except `src/core/db/index.ts`
 - NEVER use `mongoose` or any ODM — native MongoDB driver only
 - ALWAYS import from `src/core/db/` for all database operations
+- All query inputs are automatically sanitized against NoSQL injection (enabled by default)
+- To disable sanitization: set `DB_SANITIZE_INPUTS=false` in `.env` or `sanitize = false` in `claude-mastery-project.conf`
+- Programmatic toggle: `configureSanitization(false)` — only if you handle sanitization yourself
 
 #### How to use the wrapper
 

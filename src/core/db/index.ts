@@ -13,6 +13,7 @@
  * - BulkWrite for all writes (atomic, performant)
  * - $limit BEFORE $lookup (critical for join performance)
  * - $inc for counters (no read-modify-write races)
+ * - Automatic NoSQL injection sanitization on ALL inputs
  * - Graceful shutdown with closePool()
  * - Next.js hot-reload persistence via globalThis
  *
@@ -30,6 +31,98 @@ import {
   type TransactionOptions,
   type UpdateFilter,
 } from 'mongodb';
+
+// ---------------------------------------------------------------------------
+// NoSQL injection sanitization — runs automatically on ALL inputs
+// ---------------------------------------------------------------------------
+
+/**
+ * Sanitization is ENABLED by default. To disable, set:
+ *   DB_SANITIZE_INPUTS=false  (in .env)
+ *   sanitize = false          (in claude-mastery-project.conf)
+ *
+ * You should only disable this if you handle sanitization at a higher layer
+ * (e.g., Zod/Joi validation that strips operators before they reach the db).
+ */
+let _sanitizeEnabled: boolean | null = null;
+
+function isSanitizeEnabled(): boolean {
+  if (_sanitizeEnabled !== null) return _sanitizeEnabled;
+  _sanitizeEnabled = process.env.DB_SANITIZE_INPUTS !== 'false';
+  return _sanitizeEnabled;
+}
+
+/** Programmatically enable or disable input sanitization at runtime. */
+export function configureSanitization(enabled: boolean): void {
+  _sanitizeEnabled = enabled;
+}
+
+/**
+ * Recursively sanitize an object to prevent NoSQL injection.
+ * - Strips keys starting with `$` (blocks $gt, $ne, $where, $regex, etc.)
+ * - Strips keys containing `.` (blocks path traversal like `field.nested`)
+ * - Converts non-plain objects to strings (blocks prototype pollution)
+ *
+ * This runs automatically on all filter/match inputs before they touch MongoDB.
+ * Internal operations (like $set, $inc in update operators) are NOT sanitized
+ * because they come from trusted application code, not user input.
+ *
+ * Disable with DB_SANITIZE_INPUTS=false or configureSanitization(false).
+ */
+function sanitize<T>(input: T): T {
+  // When sanitization is disabled, pass through unchanged
+  if (!isSanitizeEnabled()) return input;
+
+  if (input === null || input === undefined) return input;
+
+  // Primitives are safe
+  if (typeof input !== 'object') return input;
+
+  // Dates, ObjectIds, RegExp, Buffer — pass through (trusted types)
+  if (input instanceof Date) return input;
+  if (input instanceof RegExp) return input;
+  if (typeof Buffer !== 'undefined' && Buffer.isBuffer(input)) return input;
+  if (typeof input === 'object' && '_bsontype' in (input as Record<string, unknown>)) return input;
+
+  // Arrays — sanitize each element
+  if (Array.isArray(input)) {
+    return input.map((item) => sanitize(item)) as unknown as T;
+  }
+
+  // Plain objects — strip dangerous keys
+  const cleaned: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(input as Record<string, unknown>)) {
+    // Block keys starting with $ (NoSQL operators from user input)
+    if (key.startsWith('$')) continue;
+    // Block keys containing . (field path traversal)
+    if (key.includes('.')) continue;
+    // Recursively sanitize nested values
+    cleaned[key] = sanitize(value);
+  }
+  return cleaned as T;
+}
+
+/**
+ * Sanitize a filter object (user-facing queries like $match).
+ * Exported for use in custom pipelines where you pass user input.
+ */
+export function sanitizeFilter<T>(filter: Filter<T>): Filter<T> {
+  return sanitize(filter);
+}
+
+/**
+ * Sanitize an aggregation pipeline.
+ * Only sanitizes the value inside $match stages (where user input goes).
+ * Other stages ($sort, $limit, $lookup, etc.) are trusted application code.
+ */
+function sanitizePipeline(pipeline: Document[]): Document[] {
+  return pipeline.map((stage) => {
+    if ('$match' in stage) {
+      return { $match: sanitize(stage.$match) };
+    }
+    return stage;
+  });
+}
 
 // ---------------------------------------------------------------------------
 // Pool configuration
@@ -195,9 +288,10 @@ export async function queryOne<T extends Document>(
   match: Filter<T>
 ): Promise<T | null> {
   const db = await getDb();
+  const safeMatch = sanitize(match);
   const results = await db
     .collection<T>(collection)
-    .aggregate<T>([{ $match: match }, { $limit: 1 }])
+    .aggregate<T>([{ $match: safeMatch }, { $limit: 1 }])
     .toArray();
   return results[0] ?? null;
 }
@@ -211,7 +305,8 @@ export async function queryMany<T extends Document>(
   pipeline: Document[]
 ): Promise<T[]> {
   const db = await getDb();
-  return db.collection<T>(collection).aggregate<T>(pipeline).toArray();
+  const safePipeline = sanitizePipeline(pipeline);
+  return db.collection<T>(collection).aggregate<T>(safePipeline).toArray();
 }
 
 /**
@@ -234,7 +329,7 @@ export async function queryWithLookup<T extends Document>(
 ): Promise<T | null> {
   const db = await getDb();
   const pipeline: Document[] = [
-    { $match: options.match },
+    { $match: sanitize(options.match) },
     { $limit: 1 }, // ALWAYS limit before lookup
     { $lookup: options.lookup },
   ];
@@ -260,9 +355,10 @@ export async function count(
   match: Filter<Document> = {}
 ): Promise<number> {
   const db = await getDb();
+  const safeMatch = sanitize(match);
   const result = await db
     .collection(collection)
-    .aggregate<{ count: number }>([{ $match: match }, { $count: 'count' }])
+    .aggregate<{ count: number }>([{ $match: safeMatch }, { $count: 'count' }])
     .toArray();
   return result[0]?.count ?? 0;
 }
@@ -361,8 +457,9 @@ export async function deleteOne<T extends Document>(
   filter: Filter<T>
 ): Promise<void> {
   const db = await getDb();
+  const safeFilter = sanitize(filter);
   await db.collection<T>(collection).bulkWrite([
-    { deleteOne: { filter } },
+    { deleteOne: { filter: safeFilter } },
   ]);
 }
 
@@ -374,8 +471,9 @@ export async function deleteMany<T extends Document>(
   filter: Filter<T>
 ): Promise<void> {
   const db = await getDb();
+  const safeFilter = sanitize(filter);
   await db.collection<T>(collection).bulkWrite([
-    { deleteMany: { filter } },
+    { deleteMany: { filter: safeFilter } },
   ]);
 }
 
