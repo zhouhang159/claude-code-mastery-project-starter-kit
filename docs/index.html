@@ -388,9 +388,9 @@ cp .claude/hooks/verify-no-secrets.sh ~/.claude/hooks/</code></pre>
             <h3>Defense in Depth <span class="version-tag">V3</span></h3>
             <p>Three layers of protection working together:</p>
             <ol>
-              <li><strong>CLAUDE.md rules</strong> &mdash; Behavioral suggestions</li>
-              <li><strong>Hooks</strong> &mdash; Deterministic enforcement (always runs)</li>
-              <li><strong>Git safety</strong> &mdash; .gitignore as last line of defense</li>
+              <li><strong>CLAUDE.md rules</strong> &mdash; Behavioral suggestions (weakest)</li>
+              <li><strong>Hooks</strong> &mdash; Guaranteed to run, stronger than rules, but not bulletproof</li>
+              <li><strong>Git safety</strong> &mdash; .gitignore as last line of defense (strongest)</li>
             </ol>
           </div>
 
@@ -600,8 +600,8 @@ const orders = await getOrders();      // waits unnecessarily</code></pre>
 
       <!-- Deep Dive: Hooks -->
       <section id="hooks-detail">
-        <h2>Hooks &mdash; Deterministic Enforcement</h2>
-        <p>CLAUDE.md rules are suggestions. Hooks are <strong>guarantees</strong>. They run as shell/python scripts at specific lifecycle points, enforcing behavior that Claude can't bypass.</p>
+        <h2>Hooks &mdash; Stronger Than Rules</h2>
+        <p>CLAUDE.md rules are suggestions. Hooks are <strong>stronger</strong> &mdash; they're guaranteed to <strong>run</strong> as shell/python scripts at specific lifecycle points. But hooks are not bulletproof: Claude may still work around their output. They're a significant upgrade over CLAUDE.md rules alone, but not an absolute guarantee that behavior will be followed.</p>
 
         <div class="hooks-lifecycle">
           <div class="hook-stage">
