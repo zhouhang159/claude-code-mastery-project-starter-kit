@@ -246,6 +246,14 @@
             <h3>Testing Templates</h3>
             <p>Master test checklist, issue tracking log, and a singleton database wrapper that prevents connection pool explosion. All inputs are auto-sanitized against NoSQL injection.</p>
           </div>
+
+          <div class="feature-card">
+            <div class="feature-icon feature-icon-amber">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </div>
+            <h3>Live AI Monitor</h3>
+            <p>See every tool call, token, cost, and violation in real-time with <code>/what-is-my-ai-doing</code>. Zero token overhead &mdash; runs completely outside Claude's context.</p>
+          </div>
         </div>
       </section>
 
@@ -729,6 +737,10 @@ fi</code></pre>
         <h2>Slash Commands &mdash; On-Demand Tools</h2>
         <p>Invoke these with <code>/command</code> in any Claude Code session. Each command is a markdown file in <code>.claude/commands/</code> that gives Claude specific instructions and tool permissions.</p>
 
+        <div class="callout" style="background: var(--bg-secondary); border-left: 4px solid var(--accent-amber); padding: 1rem 1.25rem; border-radius: 0.5rem; margin-bottom: 1.5rem;">
+          <strong>New:</strong> See everything your AI does in real-time &rarr; <code>/what-is-my-ai-doing</code>
+        </div>
+
         <div class="commands-grid">
           <div class="command-card">
             <h3><code>/diagram</code></h3>
@@ -769,6 +781,20 @@ fi</code></pre>
             </ul>
             <p>Multi-region writes the <strong>region map</strong> to both <code>.env</code> and <code>CLAUDE.md</code> so Claude always knows: US containers &rarr; US database, EU containers &rarr; EU database. Never cross-connects.</p>
             <p>Skips variables that already have values. Use <code>/setup --reset</code> to re-configure everything. Never displays secrets back to you. Keeps <code>.env.example</code> in sync.</p>
+          </div>
+
+          <div class="command-card">
+            <h3><code>/what-is-my-ai-doing</code></h3>
+            <p class="command-desc">Launches the RuleCatch AI-Pooler live monitor in a separate terminal. See everything your AI is doing in real time:</p>
+            <ul>
+              <li>Every tool call (Read, Write, Edit, Bash)</li>
+              <li>Token usage and cost per turn</li>
+              <li>Rule violations as they happen</li>
+              <li>Which files are being accessed</li>
+            </ul>
+            <pre class="language-bash"><code class="language-bash"># Run in a separate terminal
+npx @rulecatch/ai-pooler@latest monitor -v</code></pre>
+            <p>Zero token overhead &mdash; runs completely outside Claude's context. Also available as <code>pnpm ai:monitor</code>.</p>
           </div>
 
           <div class="command-card">
@@ -823,20 +849,6 @@ fi</code></pre>
           <div class="command-card">
             <h3><code>/architecture</code></h3>
             <p class="command-desc">Reads <code>project-docs/ARCHITECTURE.md</code> and displays the system overview, data flow diagrams, and service responsibility maps. If docs don't exist, scaffolds them.</p>
-          </div>
-
-          <div class="command-card">
-            <h3><code>/what-is-my-ai-doing</code></h3>
-            <p class="command-desc">Launches the RuleCatch AI-Pooler live monitor in a separate terminal. See everything your AI is doing in real time:</p>
-            <ul>
-              <li>Every tool call (Read, Write, Edit, Bash)</li>
-              <li>Token usage and cost per turn</li>
-              <li>Rule violations as they happen</li>
-              <li>Which files are being accessed</li>
-            </ul>
-            <pre class="language-bash"><code class="language-bash"># Run in a separate terminal
-npx @rulecatch/ai-pooler@latest monitor -v</code></pre>
-            <p>Zero token overhead &mdash; runs completely outside Claude's context. Also available as <code>pnpm ai:monitor</code>.</p>
           </div>
 
           <div class="command-card">

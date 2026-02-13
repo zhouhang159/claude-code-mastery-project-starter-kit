@@ -1,6 +1,10 @@
 # Claude Code Starter Kit
 
-### [View the Full Interactive Guide →](https://thedecipherist.github.io/claude-code-mastery-project-starter-kit/)
+[![CI](https://github.com/TheDecipherist/claude-code-mastery-project-starter-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/TheDecipherist/claude-code-mastery-project-starter-kit/actions/workflows/ci.yml)
+
+> ## [View the Full Interactive Guide →](https://thedecipherist.github.io/claude-code-mastery-project-starter-kit/)
+>
+> The GitHub Pages site has the complete documentation with syntax highlighting, navigation, and visual examples. The README below is a summary.
 
 > The definitive starting point for Claude Code projects.
 > Based on [Claude Code Mastery Guides V3-V5](https://github.com/TheDecipherist/claude-code-mastery) by TheDecipherist.
@@ -10,6 +14,16 @@
 ## What Is This?
 
 This is a **ready-to-use project template** that bakes in every best practice from the Claude Code Mastery Guide series (V3, V4, and V5). Instead of reading 4,000+ lines of guides and setting things up yourself, clone this and start building.
+
+## See It In Action
+
+<!-- Record with: asciinema rec demo.cast && agg demo.cast docs/demo.gif -->
+![Starter Kit Demo](docs/demo.gif)
+
+*Clone → `/setup` → `/diagram all` → hooks firing on file edit → `/review` catching issues*
+
+<!-- Capture /progress output as a screenshot -->
+![Slash Commands](docs/commands-preview.png)
 
 ## What's Included
 
@@ -28,6 +42,9 @@ Security gatekeeper that applies to ALL your projects:
 - New project scaffolding standards
 - Copy `global-claude-md/` contents to `~/.claude/`
 
+### 📡 Live AI Monitor
+See every tool call, token, cost, and violation in real-time with `/what-is-my-ai-doing`. Zero token overhead — runs completely outside Claude's context.
+
 ### 🪝 Hooks (Deterministic Enforcement)
 CLAUDE.md rules are suggestions. Hooks are guarantees:
 - **block-secrets.py** — Prevents reading .env, credentials, SSH keys
@@ -36,6 +53,9 @@ CLAUDE.md rules are suggestions. Hooks are guarantees:
 
 ### ⚡ Commands (Slash Commands)
 On-demand tools you invoke with `/command`:
+- `/setup` — Interactive .env configuration (database, GitHub, Docker, analytics)
+- `/diagram` — Auto-generate architecture, API, database, and infrastructure diagrams
+- `/what-is-my-ai-doing` — Live monitor of every tool call, token, cost, and violation in real-time
 - `/review` — Code review with security, performance, and type safety checks
 - `/commit` — Smart commit with conventional commit format
 - `/progress` — Real-time project status from filesystem state
