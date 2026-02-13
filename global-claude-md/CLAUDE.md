@@ -95,6 +95,10 @@ project/
 - ALWAYS use a centralized database wrapper (singleton pattern)
 - NEVER create database connections in individual files
 
+### Async Performance
+- When multiple `await` calls are independent, ALWAYS use `Promise.all`
+- NEVER await independent operations sequentially — evaluate dependencies first
+
 ---
 
 ## Workflow

@@ -73,6 +73,32 @@ await page.goto('/dashboard');
 - All tests must pass before committing
 - TypeScript must compile with no errors (`tsc --noEmit`)
 
+### 8. Parallelize Independent Awaits
+
+- When multiple `await` calls are independent (none depends on another's result), ALWAYS use `Promise.all`
+- NEVER await independent operations sequentially — it wastes time
+- Before writing sequential awaits, evaluate: does the second call need the first call's result?
+
+```typescript
+// CORRECT — independent operations run in parallel
+const [users, products, orders] = await Promise.all([
+  getUsers(),
+  getProducts(),
+  getOrders(),
+]);
+
+// WRONG — sequential when they don't depend on each other
+const users = await getUsers();
+const products = await getProducts();  // waits for users unnecessarily
+const orders = await getOrders();      // waits for products unnecessarily
+```
+
+```typescript
+// CORRECT — sequential when there IS a dependency
+const user = await getUserById(id);
+const orders = await getOrdersByUserId(user.id); // needs user.id
+```
+
 ---
 
 ## When Something Seems Wrong

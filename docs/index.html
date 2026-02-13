@@ -490,6 +490,24 @@ await page.goto('/dashboard');
               <li>TypeScript must compile with no errors (<code>tsc --noEmit</code>)</li>
             </ul>
           </div>
+          <div class="rule-block">
+            <div class="rule-header">
+              <span class="rule-number">Rule 8</span>
+              <h3>Parallelize Independent Awaits</h3>
+            </div>
+            <p>When multiple <code>await</code> calls are independent, ALWAYS use <code>Promise.all</code>. Before writing sequential awaits, evaluate: does the second call need the first call's result?</p>
+            <pre class="language-typescript"><code class="language-typescript">// CORRECT — independent operations run in parallel
+const [users, products, orders] = await Promise.all([
+  getUsers(),
+  getProducts(),
+  getOrders(),
+]);
+
+// WRONG — sequential when they don't depend on each other
+const users = await getUsers();
+const products = await getProducts();  // waits unnecessarily
+const orders = await getOrders();      // waits unnecessarily</code></pre>
+          </div>
         </div>
 
         <h3>When Something Seems Wrong</h3>
