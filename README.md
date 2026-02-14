@@ -743,7 +743,36 @@ Full project scaffolding with profiles:
 
 ## Skills — Triggered Expertise
 
-Skills are context-aware templates that activate automatically when Claude detects relevant triggers. Unlike commands (which you invoke), skills load themselves when needed.
+Skills are context-aware templates that activate automatically when Claude detects relevant keywords in your conversation. Unlike slash commands (which you invoke explicitly with `/command`), skills load themselves when needed.
+
+### What Triggers Skills?
+
+Claude monitors your conversation for specific keywords. When it detects a match, it loads the relevant skill template — giving Claude structured instructions for that specific task. You don't need to do anything special.
+
+| Skill | Trigger Keywords | What It Does |
+|-------|-----------------|--------------|
+| Code Review | `review`, `audit`, `check code`, `security review` | Loads a systematic 7-point review checklist with severity ratings |
+| Create Service | `create service`, `new service`, `scaffold service` | Scaffolds a microservice with server/handlers/adapters pattern |
+
+### How to Activate Skills
+
+**You don't** — just use natural language. Say things like:
+
+- "Review this file for security issues" → Code Review skill activates
+- "Audit the authentication module" → Code Review skill activates
+- "Create a new payment service" → Create Service skill activates
+- "Scaffold a notification service" → Create Service skill activates
+
+### Skills vs Commands
+
+| | Skills | Commands |
+|---|--------|---------|
+| **How to use** | Automatic — just use natural language | Explicit — type `/command` |
+| **When they load** | When Claude detects trigger keywords | When you invoke them |
+| **Example** | "Review this code" | `/review` |
+| **Best for** | Organic, conversational workflows | Deliberate, specific actions |
+
+Both skills and commands can cover similar ground (e.g., code review). Skills are more natural; commands are more predictable. Use whichever fits your workflow.
 
 ### Code Review Skill
 

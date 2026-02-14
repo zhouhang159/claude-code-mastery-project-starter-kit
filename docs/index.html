@@ -1145,7 +1145,47 @@ npx @rulecatch/ai-pooler@latest monitor -v</code></pre>
       <!-- Deep Dive: Skills -->
       <section id="skills-detail">
         <h2>Skills &mdash; Triggered Expertise</h2>
-        <p>Skills are context-aware templates that activate automatically when Claude detects relevant triggers. Unlike commands (which you invoke), skills load themselves when needed.</p>
+        <p>Skills are context-aware templates that activate automatically when Claude detects relevant keywords in your conversation. Unlike slash commands (which you invoke explicitly with <code>/command</code>), skills load themselves when needed.</p>
+
+        <h3>What Triggers Skills?</h3>
+        <p>Claude monitors your conversation for specific keywords. When it detects a match, it loads the relevant skill template &mdash; giving Claude structured instructions for that specific task. You don't need to do anything special.</p>
+
+        <div class="port-table-wrapper">
+          <table class="port-table">
+            <thead>
+              <tr><th>Skill</th><th>Trigger Keywords</th><th>What It Does</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Code Review</td><td><code>review</code>, <code>audit</code>, <code>check code</code>, <code>security review</code></td><td>Loads a systematic 7-point review checklist with severity ratings</td></tr>
+              <tr><td>Create Service</td><td><code>create service</code>, <code>new service</code>, <code>scaffold service</code></td><td>Scaffolds a microservice with server/handlers/adapters pattern</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>How to Activate Skills</h3>
+        <p><strong>You don't</strong> &mdash; just use natural language. Say things like:</p>
+        <ul>
+          <li>&ldquo;Review this file for security issues&rdquo; &rarr; Code Review skill activates</li>
+          <li>&ldquo;Audit the authentication module&rdquo; &rarr; Code Review skill activates</li>
+          <li>&ldquo;Create a new payment service&rdquo; &rarr; Create Service skill activates</li>
+          <li>&ldquo;Scaffold a notification service&rdquo; &rarr; Create Service skill activates</li>
+        </ul>
+
+        <h3>Skills vs Commands</h3>
+        <div class="port-table-wrapper">
+          <table class="port-table">
+            <thead>
+              <tr><th></th><th>Skills</th><th>Commands</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>How to use</strong></td><td>Automatic &mdash; just use natural language</td><td>Explicit &mdash; type <code>/command</code></td></tr>
+              <tr><td><strong>When they load</strong></td><td>When Claude detects trigger keywords</td><td>When you invoke them</td></tr>
+              <tr><td><strong>Example</strong></td><td>&ldquo;Review this code&rdquo;</td><td><code>/review</code></td></tr>
+              <tr><td><strong>Best for</strong></td><td>Organic, conversational workflows</td><td>Deliberate, specific actions</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Both skills and commands can cover similar ground (e.g., code review). Skills are more natural; commands are more predictable. Use whichever fits your workflow.</p>
 
         <div class="skill-detail-block">
           <h3>Code Review Skill</h3>
