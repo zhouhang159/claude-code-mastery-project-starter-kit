@@ -96,7 +96,10 @@
     <nav id="mobile-toc" class="mobile-toc">
       <div class="toc-header">Contents</div>
       <a href="#whats-included">What's Included</a>
+      <a href="#what-is-this">What Is This?</a>
+      <a href="#learning-path">Learning Path</a>
       <a href="#quick-start">Quick Start</a>
+      <a href="#troubleshooting">Troubleshooting</a>
       <a href="#project-structure">Project Structure</a>
       <a href="#key-concepts">Key Concepts</a>
       <a href="#claude-md-rules">CLAUDE.md Rules</a>
@@ -153,7 +156,10 @@
       <nav id="toc">
         <div class="toc-header">Contents</div>
         <a href="#whats-included" class="active">What's Included</a>
+        <a href="#what-is-this">What Is This?</a>
+        <a href="#learning-path">Learning Path</a>
         <a href="#quick-start">Quick Start</a>
+        <a href="#troubleshooting">Troubleshooting</a>
         <a href="#project-structure">Project Structure</a>
         <a href="#key-concepts">Key Concepts</a>
         <a href="#claude-md-rules">CLAUDE.md Rules</a>
@@ -209,8 +215,8 @@
             <div class="feature-icon feature-icon-blue">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
             </div>
-            <h3>18 Slash Commands</h3>
-            <p><code>/install-global</code>, <code>/setup</code>, <code>/diagram</code>, <code>/review</code>, <code>/commit</code>, <code>/progress</code>, <code>/test-plan</code>, <code>/architecture</code>, <code>/new-project</code>, <code>/security-check</code>, <code>/optimize-docker</code>, <code>/create-e2e</code>, <code>/create-api</code>, <code>/worktree</code>, <code>/what-is-my-ai-doing</code>, <code>/refactor</code>, <code>/set-clean-as-default</code>, <code>/reset-to-defaults</code></p>
+            <h3>20 Slash Commands</h3>
+            <p><code>/help</code>, <code>/quickstart</code>, <code>/install-global</code>, <code>/setup</code>, <code>/diagram</code>, <code>/review</code>, <code>/commit</code>, <code>/progress</code>, <code>/test-plan</code>, <code>/architecture</code>, <code>/new-project</code>, <code>/security-check</code>, <code>/optimize-docker</code>, <code>/create-e2e</code>, <code>/create-api</code>, <code>/worktree</code>, <code>/what-is-my-ai-doing</code>, <code>/refactor</code>, <code>/set-clean-as-default</code>, <code>/reset-to-defaults</code></p>
           </div>
 
           <div class="feature-card">
@@ -253,6 +259,99 @@
             <p>See every tool call, token, cost, and violation in real-time with <code>/what-is-my-ai-doing</code>. Zero token overhead &mdash; runs completely outside Claude's context.</p>
           </div>
         </div>
+      </section>
+
+      <!-- What Is This -->
+      <section id="what-is-this">
+        <h2>What Is This?</h2>
+        <div class="callout" style="background: var(--bg-secondary); border-left: 4px solid var(--accent-cyan); padding: 1rem 1.25rem; border-radius: 0.5rem; margin-bottom: 1.5rem;">
+          <strong>This is a scaffold template, not a runnable application.</strong> It provides the infrastructure (commands, hooks, skills, agents, documentation templates) that makes Claude Code dramatically more effective. You use it to <strong>create</strong> projects, not run it directly.
+        </div>
+
+        <h3>Two Ways to Use It</h3>
+        <div class="check-before-grid" style="grid-template-columns: 1fr 1fr;">
+          <div class="check-before-card">
+            <h4>A. Scaffold a New Project</h4>
+            <p>The most common path. Run <code>/new-project my-app clean</code> (or <code>default</code>) to create a new project directory with all Claude Code tooling pre-configured. Run <code>/quickstart</code> for a guided walkthrough.</p>
+          </div>
+          <div class="check-before-card">
+            <h4>B. Customize the Template</h4>
+            <p>Clone this repo and modify the commands, hooks, skills, and rules to match your team's standards. Then use your customized version as the source for <code>/new-project</code>.</p>
+          </div>
+        </div>
+
+        <div class="callout" style="background: rgba(255, 100, 100, 0.08); border-left: 4px solid #ff6464; padding: 1rem 1.25rem; border-radius: 0.5rem; margin-top: 1rem;">
+          <strong>What NOT to do:</strong> Don't clone this repo and run <code>pnpm dev</code> expecting a working app. This is the <em>template</em> that creates apps &mdash; it's not an app itself. Start with option A above.
+        </div>
+      </section>
+
+      <!-- Learning Path -->
+      <section id="learning-path">
+        <h2>Learning Path</h2>
+        <p>Progress through these phases at your own pace. Each builds on the previous one.</p>
+
+        <div class="learning-phases">
+          <div class="phase">
+            <div class="phase-number">1</div>
+            <h3>Initial Setup</h3>
+            <p class="phase-time">5 minutes</p>
+            <ul>
+              <li><code>/install-global</code></li>
+              <li><code>/new-project</code></li>
+              <li><code>cd my-app</code></li>
+              <li><code>/setup</code></li>
+            </ul>
+          </div>
+          <div class="phase-arrow">&rarr;</div>
+          <div class="phase">
+            <div class="phase-number">2</div>
+            <h3>Daily Workflow</h3>
+            <ul>
+              <li><code>/review</code></li>
+              <li><code>/commit</code></li>
+              <li><code>/progress</code></li>
+            </ul>
+          </div>
+          <div class="phase-arrow">&rarr;</div>
+          <div class="phase">
+            <div class="phase-number">3</div>
+            <h3>Docs &amp; Testing</h3>
+            <ul>
+              <li><code>/diagram all</code></li>
+              <li><code>/test-plan</code></li>
+              <li><code>/create-e2e</code></li>
+            </ul>
+          </div>
+          <div class="phase-arrow">&rarr;</div>
+          <div class="phase">
+            <div class="phase-number">4</div>
+            <h3>Deployment</h3>
+            <ul>
+              <li><code>/optimize-docker</code></li>
+              <li><code>/security-check</code></li>
+              <li>deploy</li>
+            </ul>
+          </div>
+          <div class="phase-arrow">&rarr;</div>
+          <div class="phase">
+            <div class="phase-number">5</div>
+            <h3>Advanced</h3>
+            <ul>
+              <li><code>/refactor</code></li>
+              <li><code>/what-is-my-ai-doing</code></li>
+              <li><code>/worktree</code></li>
+              <li>custom rules</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>First 5 Minutes</h3>
+        <pre class="language-bash"><code class="language-bash">/install-global                    # One-time: install global Claude config
+/new-project my-app clean          # Scaffold a project (or: default for full stack)
+cd ~/projects/my-app               # Enter your new project
+/setup                             # Configure .env interactively
+pnpm install && pnpm dev           # Start building</code></pre>
+        <p>Use <code>/help</code> to see all 20 commands at any time.</p>
       </section>
 
       <!-- Quick Start -->
@@ -319,6 +418,41 @@ cp .claude/hooks/check-rulecatch.sh ~/.claude/hooks/</code></pre>
         </div>
       </section>
 
+      <!-- Troubleshooting -->
+      <section id="troubleshooting">
+        <h2>Troubleshooting</h2>
+        <div class="troubleshooting-grid">
+          <div class="troubleshooting-item">
+            <h4>Hooks Not Firing</h4>
+            <p>Verify <code>.claude/settings.json</code> is valid JSON. Check that hook file paths are correct and executable. Restart your Claude Code session &mdash; hooks are loaded at session start.</p>
+          </div>
+          <div class="troubleshooting-item">
+            <h4><code>pnpm dev</code> Fails or Does Nothing</h4>
+            <p>This is a scaffold template, not a runnable app. Use <code>/new-project my-app</code> to create a project first, then run <code>pnpm dev</code> inside that project.</p>
+          </div>
+          <div class="troubleshooting-item">
+            <h4>Database Connection Errors</h4>
+            <p>Run <code>/setup</code> to configure your <code>.env</code> with a valid connection string. Check that <code>MONGODB_URI</code> is set and your IP is whitelisted in MongoDB Atlas.</p>
+          </div>
+          <div class="troubleshooting-item">
+            <h4><code>/install-global</code> Reports Conflicts</h4>
+            <p>Normal behavior. The command uses smart merge &mdash; it keeps your existing sections and only adds what's missing. Check the report output for details.</p>
+          </div>
+          <div class="troubleshooting-item">
+            <h4>Port Already in Use</h4>
+            <p>Run <code>lsof -i :PORT</code> to find the process, then <code>kill -9 PID</code>. Or kill all test ports at once: <code>pnpm test:kill-ports</code></p>
+          </div>
+          <div class="troubleshooting-item">
+            <h4>E2E Tests Timing Out</h4>
+            <p>Kill stale processes: <code>pnpm test:kill-ports</code>. Run headed to debug: <code>pnpm test:e2e:headed</code>. Check <code>playwright.config.ts</code> webServer config.</p>
+          </div>
+          <div class="troubleshooting-item">
+            <h4>RuleCatch Not Monitoring</h4>
+            <p>Install AI-Pooler: <code>npx @rulecatch/ai-pooler init</code>. Verify <code>RULECATCH_API_KEY</code> in <code>.env</code>. Run <code>pnpm ai:monitor</code> in a separate terminal.</p>
+          </div>
+        </div>
+      </section>
+
       <!-- Project Structure -->
       <section id="project-structure">
         <h2>Project Structure</h2>
@@ -328,6 +462,8 @@ cp .claude/hooks/check-rulecatch.sh ~/.claude/hooks/</code></pre>
 ├── .claude/
 │   ├── settings.json            # Hooks configuration
 │   ├── commands/
+│   │   ├── help.md              # /help — list all commands, skills, and agents
+│   │   ├── quickstart.md        # /quickstart — interactive first-run walkthrough
 │   │   ├── review.md            # /review — code review
 │   │   ├── commit.md            # /commit — smart commit
 │   │   ├── progress.md          # /progress — project status
@@ -800,6 +936,16 @@ fi</code></pre>
 
         <div class="commands-grid">
           <div class="command-card">
+            <h3><code>/help</code></h3>
+            <p class="command-desc">Lists every command, skill, and agent in the starter kit, grouped by category: Getting Started, Project Scaffold, Code Quality, Development, Infrastructure, and Monitoring. Also shows skill triggers and agent descriptions. Run <code>/help</code> anytime to see what's available.</p>
+          </div>
+
+          <div class="command-card">
+            <h3><code>/quickstart</code></h3>
+            <p class="command-desc">Interactive first-run walkthrough for new users. Checks if global config is installed, asks for a project name and profile preference (clean vs default), then walks you through the first 5 minutes: scaffolding, setup, first dev server, first review, first commit.</p>
+          </div>
+
+          <div class="command-card">
             <h3><code>/diagram</code></h3>
             <p class="command-desc">Scans your actual code and generates ASCII diagrams automatically:</p>
             <ul>
@@ -999,7 +1145,47 @@ npx @rulecatch/ai-pooler@latest monitor -v</code></pre>
       <!-- Deep Dive: Skills -->
       <section id="skills-detail">
         <h2>Skills &mdash; Triggered Expertise</h2>
-        <p>Skills are context-aware templates that activate automatically when Claude detects relevant triggers. Unlike commands (which you invoke), skills load themselves when needed.</p>
+        <p>Skills are context-aware templates that activate automatically when Claude detects relevant keywords in your conversation. Unlike slash commands (which you invoke explicitly with <code>/command</code>), skills load themselves when needed.</p>
+
+        <h3>What Triggers Skills?</h3>
+        <p>Claude monitors your conversation for specific keywords. When it detects a match, it loads the relevant skill template &mdash; giving Claude structured instructions for that specific task. You don't need to do anything special.</p>
+
+        <div class="port-table-wrapper">
+          <table class="port-table">
+            <thead>
+              <tr><th>Skill</th><th>Trigger Keywords</th><th>What It Does</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Code Review</td><td><code>review</code>, <code>audit</code>, <code>check code</code>, <code>security review</code></td><td>Loads a systematic 7-point review checklist with severity ratings</td></tr>
+              <tr><td>Create Service</td><td><code>create service</code>, <code>new service</code>, <code>scaffold service</code></td><td>Scaffolds a microservice with server/handlers/adapters pattern</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>How to Activate Skills</h3>
+        <p><strong>You don't</strong> &mdash; just use natural language. Say things like:</p>
+        <ul>
+          <li>&ldquo;Review this file for security issues&rdquo; &rarr; Code Review skill activates</li>
+          <li>&ldquo;Audit the authentication module&rdquo; &rarr; Code Review skill activates</li>
+          <li>&ldquo;Create a new payment service&rdquo; &rarr; Create Service skill activates</li>
+          <li>&ldquo;Scaffold a notification service&rdquo; &rarr; Create Service skill activates</li>
+        </ul>
+
+        <h3>Skills vs Commands</h3>
+        <div class="port-table-wrapper">
+          <table class="port-table">
+            <thead>
+              <tr><th></th><th>Skills</th><th>Commands</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>How to use</strong></td><td>Automatic &mdash; just use natural language</td><td>Explicit &mdash; type <code>/command</code></td></tr>
+              <tr><td><strong>When they load</strong></td><td>When Claude detects trigger keywords</td><td>When you invoke them</td></tr>
+              <tr><td><strong>Example</strong></td><td>&ldquo;Review this code&rdquo;</td><td><code>/review</code></td></tr>
+              <tr><td><strong>Best for</strong></td><td>Organic, conversational workflows</td><td>Deliberate, specific actions</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Both skills and commands can cover similar ground (e.g., code review). Skills are more natural; commands are more predictable. Use whichever fits your workflow.</p>
 
         <div class="skill-detail-block">
           <h3>Code Review Skill</h3>
@@ -1655,6 +1841,15 @@ claude mcp add playwright -- npx -y @anthropic-ai/playwright-mcp
 # AI development analytics & rule monitoring (RuleCatch.AI)
 npx @rulecatch/mcp-server init</code></pre>
         <p>See the <a href="https://github.com/TheDecipherist/claude-code-mastery" target="_blank" rel="noopener">Claude Code Mastery Guide</a> for the complete MCP server directory.</p>
+      </section>
+
+      <!-- Screenshot Gallery (placeholder) -->
+      <section id="screenshot-gallery">
+        <h2>Screenshots</h2>
+        <p>Visual examples of the starter kit in action. See <code>docs/screenshots/README.md</code> for capture instructions.</p>
+        <div class="callout" style="background: var(--bg-secondary); border-left: 4px solid var(--accent-amber); padding: 1rem 1.25rem; border-radius: 0.5rem;">
+          <strong>Coming soon:</strong> Screenshots of <code>/help</code> output, <code>/review</code> catching violations, auto-branching, hooks firing, <code>/diagram</code> output, <code>/setup</code> flow, AI monitor, and E2E test assertions. Contribute by following the guide in <code>docs/screenshots/README.md</code>.
+        </div>
       </section>
 
       <!-- Credits -->

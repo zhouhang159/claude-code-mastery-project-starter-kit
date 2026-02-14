@@ -13,7 +13,49 @@
 
 ## What Is This?
 
-This is a **ready-to-use project template** that bakes in every best practice from the Claude Code Mastery Guide series (V1, V2, V3, V4, and V5). Instead of reading 4,000+ lines of guides and setting things up yourself, clone this and start building.
+This is a **scaffold template**, not a runnable application. It provides the infrastructure (commands, hooks, skills, agents, documentation templates) that makes Claude Code dramatically more effective. You use it to **create** projects, not run it directly.
+
+### Two Ways to Use It
+
+**A. Scaffold a new project (most common):**
+```bash
+/new-project my-app clean    # or: /new-project my-app default
+cd ~/projects/my-app
+/setup
+```
+This creates a new project directory with all the Claude Code tooling pre-configured. Run `/quickstart` for a guided walkthrough.
+
+**B. Customize the template itself:**
+Clone this repo and modify the commands, hooks, skills, and rules to match your team's standards. Then use your customized version as the source for `/new-project`.
+
+> **What NOT to do:** Don't clone this repo and run `pnpm dev` expecting a working app. This is the *template* that creates apps — it's not an app itself. If you're looking to build something, start with option A above.
+
+## Learning Path
+
+Progress through these phases at your own pace. Each builds on the previous one.
+
+```
+Phase 1                Phase 2              Phase 3              Phase 4              Phase 5
+INITIAL SETUP          DAILY WORKFLOW       DOCS & TESTING       DEPLOYMENT           ADVANCED
+(5 minutes)
+
+/install-global   -->  /review         -->  /diagram all    -->  /optimize-docker -->  /refactor
+/new-project           /commit              /test-plan           /security-check       /what-is-my-ai-doing
+cd my-app              /progress            /create-e2e          deploy                /worktree
+/setup                                                                                 custom rules
+```
+
+### First 5 Minutes
+
+```bash
+/install-global                    # One-time: install global Claude config
+/new-project my-app clean          # Scaffold a project (or: default for full stack)
+cd ~/projects/my-app               # Enter your new project
+/setup                             # Configure .env interactively
+pnpm install && pnpm dev           # Start building
+```
+
+Use `/help` to see all 20 commands at any time.
 
 ## See It In Action
 
@@ -25,13 +67,15 @@ This is a **ready-to-use project template** that bakes in every best practice fr
 <!-- Capture /progress output as a screenshot -->
 ![Slash Commands](docs/commands-preview.png)
 
+> **Screenshots needed:** See `docs/screenshots/README.md` for the 8 screenshots and 3 animated recordings that complete this section.
+
 ## What's Included
 
 Everything you need to start a Claude Code project the right way — security, automation, documentation, and testing all pre-configured.
 
 - **CLAUDE.md** — Battle-tested project instructions with 11 numbered critical rules for security, TypeScript, database wrappers, testing, and deployment
 - **Global CLAUDE.md** — Security gatekeeper for all projects. Never publish secrets, never commit .env files, standardized scaffolding rules
-- **18 Slash Commands** — `/install-global`, `/setup`, `/diagram`, `/review`, `/commit`, `/progress`, `/test-plan`, `/architecture`, `/new-project`, `/security-check`, `/optimize-docker`, `/create-e2e`, `/create-api`, `/worktree`, `/what-is-my-ai-doing`, `/refactor`, `/set-clean-as-default`, `/reset-to-defaults`
+- **20 Slash Commands** — `/help`, `/quickstart`, `/install-global`, `/setup`, `/diagram`, `/review`, `/commit`, `/progress`, `/test-plan`, `/architecture`, `/new-project`, `/security-check`, `/optimize-docker`, `/create-e2e`, `/create-api`, `/worktree`, `/what-is-my-ai-doing`, `/refactor`, `/set-clean-as-default`, `/reset-to-defaults`
 - **9 Hooks** — Deterministic enforcement that always runs. Block secrets, lint on save, verify no credentials, branch protection, port conflicts, Rybbit pre-deploy gate, E2E test gate, env sync warnings, and RuleCatch monitoring
 - **Skills** — Context-aware templates: systematic code review checklist and full microservice scaffolding
 - **Custom Agents** — Read-only code reviewer for security audits. Test writer that creates tests with explicit assertions
@@ -100,6 +144,55 @@ That's it. Claude Code now has battle-tested rules, deterministic hooks, slash c
 
 ---
 
+## Troubleshooting
+
+### Hooks Not Firing
+
+- Verify `.claude/settings.json` is valid JSON: `python3 -m json.tool .claude/settings.json`
+- Check that hook file paths are correct and executable: `ls -la .claude/hooks/`
+- Restart your Claude Code session — hooks are loaded at session start
+
+### `pnpm dev` Fails or Does Nothing
+
+This is a scaffold template, not a runnable app. Use `/new-project my-app` to create a project first, then run `pnpm dev` inside that project.
+
+### Database Connection Errors
+
+- Run `/setup` to configure your `.env` with a valid connection string
+- Check that `MONGODB_URI` (or `DATABASE_URL`) is set in `.env`
+- Verify your IP is whitelisted in MongoDB Atlas Network Access
+
+### `/install-global` Reports Conflicts
+
+This is normal. The command uses smart merge — it keeps your existing sections and only adds what's missing. If sections overlap, it preserves yours. Check the report output for details on what was added vs skipped.
+
+### Port Already in Use
+
+```bash
+# Find what's using the port
+lsof -i :3000
+
+# Kill it
+kill -9 <PID>
+
+# Or kill all test ports at once
+pnpm test:kill-ports
+```
+
+### E2E Tests Timing Out
+
+- Kill stale processes on test ports: `pnpm test:kill-ports`
+- Run headed to see what's happening: `pnpm test:e2e:headed`
+- Check that `playwright.config.ts` has correct `webServer` commands and ports
+
+### RuleCatch Not Monitoring
+
+- Install the AI-Pooler: `npx @rulecatch/ai-pooler init --api-key=YOUR_KEY --region=us`
+- Verify your API key is set: check `RULECATCH_API_KEY` in `.env`
+- Run `pnpm ai:monitor` in a separate terminal to see live output
+
+---
+
 ## Project Structure
 
 ```
@@ -109,6 +202,8 @@ project/
 ├── .claude/
 │   ├── settings.json            # Hooks configuration
 │   ├── commands/
+│   │   ├── help.md              # /help — list all commands, skills, and agents
+│   │   ├── quickstart.md        # /quickstart — interactive first-run walkthrough
 │   │   ├── review.md            # /review — code review
 │   │   ├── commit.md            # /commit — smart commit
 │   │   ├── progress.md          # /progress — project status
@@ -473,6 +568,14 @@ Hooks are wired up in `.claude/settings.json`:
 
 Invoke these with `/command` in any Claude Code session. Each command is a markdown file in `.claude/commands/` that gives Claude specific instructions and tool permissions.
 
+### `/help`
+
+Lists every command, skill, and agent in the starter kit, grouped by category: Getting Started, Project Scaffold, Code Quality, Development, Infrastructure, and Monitoring. Also shows skill triggers and agent descriptions. Run `/help` anytime to see what's available.
+
+### `/quickstart`
+
+Interactive first-run walkthrough for new users. Checks if global config is installed, asks for a project name and profile preference, then walks you through the first 5 minutes: scaffolding, setup, first dev server, first review, first commit. Designed for someone who just cloned the starter kit and doesn't know where to start.
+
 ### `/diagram`
 
 Scans your actual code and generates ASCII diagrams automatically:
@@ -642,7 +745,36 @@ Full project scaffolding with profiles:
 
 ## Skills — Triggered Expertise
 
-Skills are context-aware templates that activate automatically when Claude detects relevant triggers. Unlike commands (which you invoke), skills load themselves when needed.
+Skills are context-aware templates that activate automatically when Claude detects relevant keywords in your conversation. Unlike slash commands (which you invoke explicitly with `/command`), skills load themselves when needed.
+
+### What Triggers Skills?
+
+Claude monitors your conversation for specific keywords. When it detects a match, it loads the relevant skill template — giving Claude structured instructions for that specific task. You don't need to do anything special.
+
+| Skill | Trigger Keywords | What It Does |
+|-------|-----------------|--------------|
+| Code Review | `review`, `audit`, `check code`, `security review` | Loads a systematic 7-point review checklist with severity ratings |
+| Create Service | `create service`, `new service`, `scaffold service` | Scaffolds a microservice with server/handlers/adapters pattern |
+
+### How to Activate Skills
+
+**You don't** — just use natural language. Say things like:
+
+- "Review this file for security issues" → Code Review skill activates
+- "Audit the authentication module" → Code Review skill activates
+- "Create a new payment service" → Create Service skill activates
+- "Scaffold a notification service" → Create Service skill activates
+
+### Skills vs Commands
+
+| | Skills | Commands |
+|---|--------|---------|
+| **How to use** | Automatic — just use natural language | Explicit — type `/command` |
+| **When they load** | When Claude detects trigger keywords | When you invoke them |
+| **Example** | "Review this code" | `/review` |
+| **Best for** | Organic, conversational workflows | Deliberate, specific actions |
+
+Both skills and commands can cover similar ground (e.g., code review). Skills are more natural; commands are more predictable. Use whichever fits your workflow.
 
 ### Code Review Skill
 
