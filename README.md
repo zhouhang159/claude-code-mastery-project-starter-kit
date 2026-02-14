@@ -30,6 +30,33 @@ Clone this repo and modify the commands, hooks, skills, and rules to match your 
 
 > **What NOT to do:** Don't clone this repo and run `pnpm dev` expecting a working app. This is the *template* that creates apps — it's not an app itself. If you're looking to build something, start with option A above.
 
+## Learning Path
+
+Progress through these phases at your own pace. Each builds on the previous one.
+
+```
+Phase 1                Phase 2              Phase 3              Phase 4              Phase 5
+INITIAL SETUP          DAILY WORKFLOW       DOCS & TESTING       DEPLOYMENT           ADVANCED
+(5 minutes)
+
+/install-global   -->  /review         -->  /diagram all    -->  /optimize-docker -->  /refactor
+/new-project           /commit              /test-plan           /security-check       /what-is-my-ai-doing
+cd my-app              /progress            /create-e2e          deploy                /worktree
+/setup                                                                                 custom rules
+```
+
+### First 5 Minutes
+
+```bash
+/install-global                    # One-time: install global Claude config
+/new-project my-app clean          # Scaffold a project (or: default for full stack)
+cd ~/projects/my-app               # Enter your new project
+/setup                             # Configure .env interactively
+pnpm install && pnpm dev           # Start building
+```
+
+Use `/help` to see all 20 commands at any time.
+
 ## See It In Action
 
 <!-- Record with: asciinema rec demo.cast && agg demo.cast docs/demo.gif -->
@@ -112,6 +139,55 @@ claude
 ```
 
 That's it. Claude Code now has battle-tested rules, deterministic hooks, slash commands, and documentation templates all ready to go.
+
+---
+
+## Troubleshooting
+
+### Hooks Not Firing
+
+- Verify `.claude/settings.json` is valid JSON: `python3 -m json.tool .claude/settings.json`
+- Check that hook file paths are correct and executable: `ls -la .claude/hooks/`
+- Restart your Claude Code session — hooks are loaded at session start
+
+### `pnpm dev` Fails or Does Nothing
+
+This is a scaffold template, not a runnable app. Use `/new-project my-app` to create a project first, then run `pnpm dev` inside that project.
+
+### Database Connection Errors
+
+- Run `/setup` to configure your `.env` with a valid connection string
+- Check that `MONGODB_URI` (or `DATABASE_URL`) is set in `.env`
+- Verify your IP is whitelisted in MongoDB Atlas Network Access
+
+### `/install-global` Reports Conflicts
+
+This is normal. The command uses smart merge — it keeps your existing sections and only adds what's missing. If sections overlap, it preserves yours. Check the report output for details on what was added vs skipped.
+
+### Port Already in Use
+
+```bash
+# Find what's using the port
+lsof -i :3000
+
+# Kill it
+kill -9 <PID>
+
+# Or kill all test ports at once
+pnpm test:kill-ports
+```
+
+### E2E Tests Timing Out
+
+- Kill stale processes on test ports: `pnpm test:kill-ports`
+- Run headed to see what's happening: `pnpm test:e2e:headed`
+- Check that `playwright.config.ts` has correct `webServer` commands and ports
+
+### RuleCatch Not Monitoring
+
+- Install the AI-Pooler: `npx @rulecatch/ai-pooler init --api-key=YOUR_KEY --region=us`
+- Verify your API key is set: check `RULECATCH_API_KEY` in `.env`
+- Run `pnpm ai:monitor` in a separate terminal to see live output
 
 ---
 
