@@ -1985,7 +1985,11 @@ ENV NEXT_PUBLIC_RYBBIT_URL=$NEXT_PUBLIC_RYBBIT_URL
 When the default profile or user selects ai-pooler:
 
 ```bash
-# Install and initialize
+# Free monitor mode — works immediately, no API key needed
+# Run in a separate terminal to see live AI activity
+npx @rulecatch/ai-pooler monitor --no-api-key
+
+# Full setup with API key (for violation tracking, dashboards, and alerts)
 npx @rulecatch/ai-pooler init --api-key=dc_your_key --region=us
 ```
 

@@ -251,7 +251,7 @@ cat package.json | python3 -c "import sys,json; [print(k) for k in json.load(sys
 
 ### 2.6 Utility Scripts
 
-- [ ] `ai:monitor` = `npx @rulecatch/ai-pooler@latest monitor -v`
+- [ ] `ai:monitor` = `npx @rulecatch/ai-pooler monitor --no-api-key`
 - [ ] `docker:optimize` — exists (echo helper)
 - [ ] `clean` = `rm -rf dist coverage test-results playwright-report`
 - [ ] `precommit` = `tsc --noEmit`
@@ -1307,6 +1307,127 @@ rm -rf /tmp/test-convert
 
 ---
 
+## Section 21: Featured Packages Verification
+
+> Verify ClassMCP, Classpresso, and TerseJSON are correctly integrated across all documentation locations.
+
+### 21.1 Classpresso in package.json
+
+```bash
+cat package.json | python3 -c "import sys,json; d=json.load(sys.stdin); print('classpresso' in d.get('devDependencies',{})); print('build:optimize' in d.get('scripts',{})); print('postbuild' in d.get('scripts',{}))"
+```
+
+- [ ] `classpresso` in devDependencies (^1.7.2)
+- [ ] `build:optimize` script exists (`classpresso optimize`)
+- [ ] `postbuild` script exists (`pnpm build:optimize`)
+
+### 21.2 ClassMCP in CSS-Enabled Profiles
+
+```bash
+grep "classmcp" claude-mastery-project.conf
+```
+
+- [ ] `classmcp` in `[default]` mcp
+- [ ] `classmcp` in `[enterprise]` mcp
+- [ ] `classmcp` in `[static-site]` mcp
+- [ ] `classmcp` in `[quick]` mcp
+- [ ] `classmcp` in `[vue]` mcp
+- [ ] `classmcp` in `[nuxt]` mcp
+- [ ] `classmcp` in `[svelte]` mcp
+- [ ] `classmcp` in `[sveltekit]` mcp
+- [ ] `classmcp` in `[angular]` mcp
+- [ ] `classmcp` in `[django]` mcp (has templates/CSS)
+
+### 21.3 ClassMCP NOT in Backend-Only Profiles
+
+```bash
+# These should NOT contain classmcp
+for profile in clean api go python-api flask; do
+  echo "$profile: $(grep -A5 "^\[$profile\]" claude-mastery-project.conf | grep classmcp || echo 'NOT FOUND')"
+done
+```
+
+- [ ] `[clean]` does NOT have `classmcp`
+- [ ] `[api]` does NOT have `classmcp`
+- [ ] `[go]` does NOT have `classmcp`
+- [ ] `[python-api]` does NOT have `classmcp`
+- [ ] `[flask]` does NOT have `classmcp`
+
+### 21.4 Classpresso in CSS-Enabled npm Profiles
+
+```bash
+grep "classpresso" claude-mastery-project.conf
+```
+
+- [ ] `classpresso` in `[default]` npm
+- [ ] `classpresso` in `[enterprise]` npm
+- [ ] `classpresso` in `[static-site]` npm
+- [ ] `classpresso` in `[quick]` npm
+- [ ] `classpresso` in `[vue]` npm
+- [ ] `classpresso` in `[nuxt]` npm
+- [ ] `classpresso` in `[svelte]` npm
+- [ ] `classpresso` in `[sveltekit]` npm
+- [ ] `classpresso` in `[angular]` npm
+- [ ] `classpresso` NOT in `[django]` npm (Python, not npm)
+
+### 21.5 Documentation Sync — Featured Packages Present
+
+```bash
+grep -c "Featured Packages" README.md docs/index.html CLAUDE.md
+```
+
+- [ ] `README.md` has "Featured Packages" section (count >= 1)
+- [ ] `docs/index.html` has "Featured Packages" section (count >= 1)
+- [ ] `CLAUDE.md` has "Featured Packages" section (count >= 1)
+
+### 21.6 TerseJSON Marked Optional Everywhere
+
+```bash
+grep -i "optional" README.md docs/index.html CLAUDE.md | grep -i "tersejson\|terse"
+```
+
+- [ ] README.md marks TerseJSON as optional
+- [ ] docs/index.html marks TerseJSON as optional
+- [ ] CLAUDE.md marks TerseJSON as optional
+
+### 21.7 Disclosure Note Present
+
+```bash
+grep -i "full disclosure\|same developer\|TheDecipherist" README.md docs/index.html CLAUDE.md | head -10
+```
+
+- [ ] README.md has disclosure note about packages being by TheDecipherist
+- [ ] docs/index.html has disclosure callout
+- [ ] CLAUDE.md mentions TheDecipherist as developer
+
+### 21.8 build:optimize in CLAUDE.md Quick Reference
+
+```bash
+grep "build:optimize" CLAUDE.md
+```
+
+- [ ] `build:optimize` appears in the CLAUDE.md quick reference table
+
+### 21.9 ClassMCP in MCP Servers Sections
+
+```bash
+grep -c "ClassMCP" README.md docs/index.html
+```
+
+- [ ] README.md has ClassMCP card in Recommended MCP Servers section
+- [ ] docs/index.html has ClassMCP card in MCP Servers section
+
+### 21.10 CSS Row Updated in Supported Technologies
+
+```bash
+grep -i "css.*classmcp\|css.*classpresso" README.md docs/index.html
+```
+
+- [ ] README.md CSS row mentions ClassMCP + Classpresso
+- [ ] docs/index.html CSS row mentions ClassMCP + Classpresso
+
+---
+
 ## Section 20: Cleanup (Extended)
 
 After completing all tests:
@@ -1347,6 +1468,7 @@ rm -rf /tmp/test-convert
 | 18. New Commands | | | | |
 | 19. Convert Command | | | | |
 | 20. Cleanup | | | | |
+| 21. Featured Packages | | | | |
 | **TOTAL** | | | | |
 
 **Tested by:** _______________

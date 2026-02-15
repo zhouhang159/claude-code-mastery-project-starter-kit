@@ -87,7 +87,43 @@ Everything you need to start a Claude Code project the right way — security, a
 - **Custom Agents** — Read-only code reviewer for security audits. Test writer that creates tests with explicit assertions
 - **Documentation Templates** — Pre-structured ARCHITECTURE.md, INFRASTRUCTURE.md, and DECISIONS.md templates
 - **Testing Templates** — Master test checklist, issue tracking log, and a singleton database wrapper that prevents connection pool explosion
-- **Live AI Monitor** — See every tool call, token, cost, and violation in real-time with `/what-is-my-ai-doing`. Zero token overhead (requires [RuleCatch](https://rulecatch.ai) — optional)
+- **Live AI Monitor** — See every tool call, token, cost, and violation in real-time with `/what-is-my-ai-doing`. Free monitor mode works instantly — no API key, no account. Run `pnpm ai:monitor` in a separate terminal. Zero token overhead
+
+## Featured Packages
+
+Three open-source npm packages by [TheDecipherist](https://github.com/TheDecipherist) — the same developer behind this starter kit — are integrated into the default build for CSS-enabled profiles. All are MIT-licensed.
+
+> **Full disclosure:** These packages are developed by the same person who maintains this starter kit. They are completely open source (MIT license), and the starter kit works fully without them. ClassMCP and Classpresso are auto-included in CSS-enabled profiles because they directly complement the AI-assisted CSS workflow this kit teaches. TerseJSON is documented but not auto-included.
+
+### ClassMCP — Semantic CSS for AI
+
+MCP server that provides semantic CSS class patterns to Claude, reducing token usage when generating or editing styles. Auto-added to the `mcp` field in CSS-enabled profiles.
+
+```bash
+claude mcp add classmcp -- npx -y classmcp@latest
+```
+
+npm: [classmcp](https://www.npmjs.com/package/classmcp) · [Website](https://classmcp.com?utm_source=github&utm_medium=readme&utm_campaign=classmcp&utm_content=featured-packages)
+
+### Classpresso — Post-Build CSS Optimization
+
+Consolidates CSS classes after build for 50% faster style recalculation with zero runtime overhead. Auto-added as a devDependency in CSS-enabled profiles. Runs automatically after `pnpm build`.
+
+```bash
+pnpm add -D classpresso
+```
+
+npm: [classpresso](https://www.npmjs.com/package/classpresso) · [Website](https://classpresso.com?utm_source=github&utm_medium=readme&utm_campaign=classpresso&utm_content=featured-packages)
+
+### TerseJSON — Memory-Efficient JSON (Optional)
+
+Proxy-based lazy JSON expansion achieving ~70% memory reduction for large payloads. **Not auto-included** — install only if your project handles large JSON datasets.
+
+```bash
+pnpm add tersejson
+```
+
+npm: [tersejson](https://www.npmjs.com/package/tersejson) · [Website](https://tersejson.com?utm_source=github&utm_medium=readme&utm_campaign=tersejson&utm_content=featured-packages)
 
 ## Supported Technologies
 
@@ -105,7 +141,7 @@ This starter kit works with any language, framework, or database. Use `/new-proj
 | **Database** | MongoDB, PostgreSQL, MySQL, MSSQL, SQLite | Centralized wrapper for each (NoSQL + SQL) |
 | **Hosting** | Dokploy, Vercel, Static (GitHub Pages, Netlify) | Deployment scripts + Docker |
 | **Testing** | Vitest, Playwright, pytest, Go test | Framework-appropriate test setup |
-| **CSS** | Tailwind CSS | Optional, any framework |
+| **CSS** | Tailwind CSS + ClassMCP + Classpresso | ClassMCP (MCP) + Classpresso (post-build) auto-included in CSS profiles |
 
 ### Recommended Stacks by Use Case
 
@@ -228,11 +264,10 @@ pnpm test:kill-ports
 
 ### RuleCatch Not Monitoring
 
-> **RuleCatch is optional.** The starter kit works fully without it — the hook skips silently if RuleCatch isn't installed. Only set this up if you want AI session analytics and rule monitoring.
+> **Free monitor mode requires no setup.** Run `pnpm ai:monitor` in a separate terminal — it works instantly with no API key.
 
-- Install the AI-Pooler: `npx @rulecatch/ai-pooler init --api-key=YOUR_KEY --region=us`
-- Verify your API key is set: check `RULECATCH_API_KEY` in `.env`
-- Run `pnpm ai:monitor` in a separate terminal to see live output
+- **Free monitor:** `pnpm ai:monitor` (or `npx @rulecatch/ai-pooler monitor --no-api-key`) — live view of tool calls, tokens, cost
+- **Full experience:** Sign up at [rulecatch.ai](https://rulecatch.ai) for dashboards, violation tracking, and alerts, then run `npx @rulecatch/ai-pooler init --api-key=YOUR_KEY --region=us`
 
 ---
 
@@ -663,21 +698,21 @@ Skips variables that already have values. Use `/setup --reset` to re-configure e
 
 ### `/what-is-my-ai-doing`
 
-> **Requires [RuleCatch.AI](https://rulecatch.ai).** This command launches the RuleCatch AI-Pooler — if you haven't installed it yet, see the [Monitor Your Rules](#monitor-your-rules-with-rulecatchai-optional) section below.
-
-Launches the RuleCatch AI-Pooler live monitor in a separate terminal:
+Launches the RuleCatch AI-Pooler live monitor in a **separate terminal**. Free monitor mode works instantly — no API key, no account, no setup required.
 
 - Every tool call (Read, Write, Edit, Bash)
 - Token usage and cost per turn
-- Rule violations as they happen
 - Which files are being accessed
+- Cost per session
 
 ```bash
-# Run in a separate terminal
-npx @rulecatch/ai-pooler@latest monitor -v
+# Run in a separate terminal — works immediately, no setup
+npx @rulecatch/ai-pooler monitor --no-api-key
 ```
 
 Zero token overhead — runs completely outside Claude's context. Also available as `pnpm ai:monitor`.
+
+> **Want more?** With a [RuleCatch.AI](https://rulecatch.ai) API key you also get violation tracking, dashboards, trend reports, and the MCP server so Claude can query its own violations. See the [Monitor Your Rules](#monitor-your-rules-with-rulecatchai-optional) section below.
 
 ### `/review`
 
@@ -1254,6 +1289,7 @@ When modifying a plan:
 | `pnpm dev:api` | Dev server on port 3001 |
 | `pnpm dev:dashboard` | Dev server on port 3002 |
 | `pnpm build` | Type-check + compile TypeScript |
+| `pnpm build:optimize` | Post-build CSS class consolidation via Classpresso (auto-runs after build) |
 | `pnpm start` | Run production build |
 | `pnpm typecheck` | TypeScript check only (no emit) |
 | **Testing** | |
@@ -1275,7 +1311,7 @@ When modifying a plan:
 | `pnpm content:build:id <id>` | Build a single article by ID |
 | `pnpm content:list` | List all articles |
 | **Monitoring & Docker** | |
-| `pnpm ai:monitor` | Live AI activity monitor (run in separate terminal) |
+| `pnpm ai:monitor` | Free monitor mode — live AI activity (run in separate terminal, no API key needed) |
 | `pnpm docker:optimize` | Audit Dockerfile (use `/optimize-docker` in Claude) |
 | **Utility** | |
 | `pnpm clean` | Remove dist/, coverage/, test-results/ |
@@ -1284,27 +1320,40 @@ When modifying a plan:
 
 ## Monitor Your Rules with RuleCatch.AI (Optional)
 
-> **Not required.** The starter kit works fully without RuleCatch. All hooks, commands, and quality gates function independently. If you don't install it, the `check-rulecatch.sh` hook simply skips silently with zero overhead.
+> **Full disclosure:** RuleCatch.AI is built by [TheDecipherist](https://github.com/TheDecipherist) — the same developer behind this starter kit. It's included because it's an integral part of the workflow this kit teaches, and it's purpose-built for catching the exact issues AI-assisted development introduces.
 
-> **Full disclosure:** RuleCatch.AI is built by [TheDecipherist](https://github.com/TheDecipherist) — the same developer behind this starter kit. It's included because it's an integral part of the workflow this kit teaches, and it's purpose-built for catching the exact issues AI-assisted development introduces. It is fully optional but recommended.
+### Try It Now — Free Monitor Mode
 
-**Why you'd want it anyway:** AI models break your CLAUDE.md rules more often than you'd expect — wrong language, skipped patterns, hardcoded values, ignored constraints. Code that looks right and passes linting, but violates your project's actual standards. [RuleCatch.AI](https://rulecatch.ai?utm_source=github-pages&utm_medium=article&utm_campaign=rulecatch&utm_content=tutorial) bridges the gap between detecting these violations and fixing them. It monitors every tool call in real-time, and with the MCP server installed, Claude can query its own violations and generate fix plans — ask it: *"What rules am I breaking the most?"* or *"Create a plan to fix today's violations."*
+See what your AI is doing in real-time. No API key, no account, no setup — just open a **separate terminal** and run:
 
-**How it works — three components:**
+```bash
+# Open a separate terminal and run this while Claude works
+npx @rulecatch/ai-pooler monitor --no-api-key
+```
+
+Also available as `pnpm ai:monitor`. You'll instantly see every tool call, token count, cost per turn, and which files Claude is touching — all updating live. Zero token overhead — runs completely outside Claude's context.
+
+This is the free preview that lets you see what you've been missing. Once you see the stream of activity, you'll understand why monitoring matters.
+
+### Unlock the Full Experience
+
+**Why you'd want it:** AI models break your CLAUDE.md rules more often than you'd expect — wrong language, skipped patterns, hardcoded values, ignored constraints. Code that looks right and passes linting, but violates your project's actual standards. [RuleCatch.AI](https://rulecatch.ai?utm_source=github-pages&utm_medium=article&utm_campaign=rulecatch&utm_content=tutorial) bridges the gap between detecting these violations and fixing them.
+
+**What you get with an API key:**
 
 | Component | What it does |
 |-----------|-------------|
-| **[AI-Pooler](https://www.npmjs.com/package/@rulecatch/ai-pooler)** | Collects tool calls from Claude via hooks. Runs outside the AI context — zero token overhead, invisible to the model |
-| **[Dashboard](https://rulecatch.ai?utm_source=github-pages&utm_medium=article&utm_campaign=rulecatch&utm_content=tutorial)** | Shows violations across 18 rule categories, session analytics (tokens, cost, lines/hour), trend reports, and per-file attribution. Alerts via Slack, Discord, PagerDuty, and more |
+| **[AI-Pooler](https://www.npmjs.com/package/@rulecatch/ai-pooler)** | Everything in free monitor mode PLUS persistent violation tracking, session history, and cost analytics |
+| **[Dashboard](https://rulecatch.ai?utm_source=github-pages&utm_medium=article&utm_campaign=rulecatch&utm_content=tutorial)** | Violations across 18 rule categories, session analytics (tokens, cost, lines/hour), trend reports, and per-file attribution. Alerts via Slack, Discord, PagerDuty, and more |
 | **[MCP Server](https://www.npmjs.com/package/@rulecatch/mcp-server)** | Gives Claude direct read access to violation data. Ask: *"Show all security violations this week"* or *"Create a plan to fix today's violations"* — Claude reviews, analyzes, and generates file-by-file fix plans without leaving your session |
 
 - **200+ pre-built rules** across security, TypeScript, React, Next.js, MongoDB, Docker, and more — violations detected in under 100ms
 - **Privacy-first** — AES-256-GCM client-side encryption. You hold the key — RuleCatch never sees your plaintext data. US and EU data isolation, fully GDPR compliant
 
-**Quick setup:**
+**Full setup (with API key):**
 
 ```bash
-# Install the AI-Pooler (hooks into Claude Code automatically)
+# Install the AI-Pooler with your API key (hooks into Claude Code automatically)
 npx @rulecatch/ai-pooler init --api-key=dc_your_key --region=us
 
 # Add the MCP server to query violations from Claude
@@ -1365,6 +1414,23 @@ claude mcp add playwright -- npx -y @playwright/mcp@latest
 ```
 
 npm: [@playwright/mcp](https://www.npmjs.com/package/@playwright/mcp) · [GitHub](https://github.com/microsoft/playwright-mcp)
+
+---
+
+### ClassMCP — Semantic CSS for AI
+
+> **Developed by [TheDecipherist](https://github.com/TheDecipherist)** — the same developer behind this starter kit. Open source (MIT license).
+
+MCP server that provides semantic CSS class patterns to Claude, reducing token usage when working with styles. Instead of Claude guessing class names or hallucinating utility classes, ClassMCP feeds it the correct patterns from your project's CSS framework. Auto-included in all CSS-enabled profiles.
+
+**What it solves:** Hallucinated CSS class names, inconsistent styling patterns, wasted tokens on style guessing
+**How to use:** Install once — ClassMCP automatically provides CSS context when Claude works with styles
+
+```bash
+claude mcp add classmcp -- npx -y classmcp@latest
+```
+
+npm: [classmcp](https://www.npmjs.com/package/classmcp) · [Website](https://classmcp.com?utm_source=github&utm_medium=readme&utm_campaign=classmcp&utm_content=mcp-servers)
 
 ---
 

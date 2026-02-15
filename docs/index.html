@@ -68,15 +68,15 @@
             </a>
             <a href="https://classpresso.com?utm_source=github&utm_medium=website&utm_campaign=claude-code-starter-kit&utm_content=dropdown-classpresso" target="_blank" rel="noopener">
               <img src="https://www.google.com/s2/favicons?domain=classpresso.com&sz=32" alt="" class="link-favicon">
-              <span class="dropdown-item-text"><span class="dropdown-item-title">Classpresso</span><span class="dropdown-item-desc">AI-powered class scheduling</span></span>
+              <span class="dropdown-item-text"><span class="dropdown-item-title">Classpresso</span><span class="dropdown-item-desc">Post-build CSS class consolidation</span></span>
             </a>
             <a href="https://classmcp.com?utm_source=github&utm_medium=website&utm_campaign=claude-code-starter-kit&utm_content=dropdown-classmcp" target="_blank" rel="noopener">
               <img src="https://www.google.com/s2/favicons?domain=classmcp.com&sz=32" alt="" class="link-favicon">
-              <span class="dropdown-item-text"><span class="dropdown-item-title">ClassMCP</span><span class="dropdown-item-desc">MCP server for Claude Code</span></span>
+              <span class="dropdown-item-text"><span class="dropdown-item-title">ClassMCP</span><span class="dropdown-item-desc">Semantic CSS class patterns for AI</span></span>
             </a>
             <a href="https://tersejson.com?utm_source=github&utm_medium=website&utm_campaign=claude-code-starter-kit&utm_content=dropdown-tersejson" target="_blank" rel="noopener">
               <img src="https://www.google.com/s2/favicons?domain=tersejson.com&sz=32" alt="" class="link-favicon">
-              <span class="dropdown-item-text"><span class="dropdown-item-title">TerseJSON</span><span class="dropdown-item-desc">Compact JSON formatting</span></span>
+              <span class="dropdown-item-text"><span class="dropdown-item-title">TerseJSON</span><span class="dropdown-item-desc">Memory-efficient JSON with lazy expansion</span></span>
             </a>
             <a href="https://credhopper.com?utm_source=github&utm_medium=website&utm_campaign=claude-code-starter-kit&utm_content=dropdown-credhopper" target="_blank" rel="noopener">
               <img src="https://www.google.com/s2/favicons?domain=credhopper.com&sz=32" alt="" class="link-favicon">
@@ -96,6 +96,7 @@
     <nav id="mobile-toc" class="mobile-toc">
       <div class="toc-header">Contents</div>
       <a href="#whats-included">What's Included</a>
+      <a href="#featured-packages">Featured Packages</a>
       <a href="#what-is-this">What Is This?</a>
       <a href="#learning-path">Learning Path</a>
       <a href="#quick-start">Quick Start</a>
@@ -157,6 +158,7 @@
       <nav id="toc">
         <div class="toc-header">Contents</div>
         <a href="#whats-included" class="active">What's Included</a>
+        <a href="#featured-packages">Featured Packages</a>
         <a href="#what-is-this">What Is This?</a>
         <a href="#learning-path">Learning Path</a>
         <a href="#quick-start">Quick Start</a>
@@ -258,7 +260,40 @@
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
             </div>
             <h3>Live AI Monitor</h3>
-            <p>See every tool call, token, cost, and violation in real-time with <code>/what-is-my-ai-doing</code>. Zero token overhead &mdash; runs completely outside Claude's context. Requires <a href="https://rulecatch.ai?utm_source=github-pages&utm_medium=article&utm_campaign=rulecatch&utm_content=tutorial" target="_blank" rel="noopener">RuleCatch.AI</a> (optional).</p>
+            <p>See every tool call, token, cost, and file access in real-time. Free monitor mode works instantly &mdash; no API key, no setup. Run <code>pnpm ai:monitor</code> in a separate terminal. Zero token overhead.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Featured Packages -->
+      <section id="featured-packages">
+        <h2>Featured Packages</h2>
+        <p>Three open-source npm packages by <a href="https://github.com/TheDecipherist" target="_blank" rel="noopener">TheDecipherist</a> &mdash; the same developer behind this starter kit &mdash; are integrated into CSS-enabled profiles. All are MIT-licensed.</p>
+
+        <div class="callout" style="background: var(--bg-secondary); border-left: 4px solid var(--accent-cyan); padding: 1rem 1.25rem; border-radius: 0.5rem; margin-bottom: 1.5rem;">
+          <strong>Full disclosure:</strong> These packages are developed by the same person who maintains this starter kit. They are completely open source (MIT license), and the starter kit works fully without them. ClassMCP and Classpresso are auto-included in CSS-enabled profiles because they directly complement the AI-assisted CSS workflow this kit teaches. TerseJSON is documented but not auto-included.
+        </div>
+
+        <div class="commands-grid">
+          <div class="command-card">
+            <h3>ClassMCP &mdash; Semantic CSS for AI</h3>
+            <p class="command-desc">MCP server that provides semantic CSS class patterns to Claude, reducing token usage when generating or editing styles. Auto-added to the <code>mcp</code> field in CSS-enabled profiles.</p>
+            <pre class="language-bash"><code class="language-bash">claude mcp add classmcp -- npx -y classmcp@latest</code></pre>
+            <p>npm: <a href="https://www.npmjs.com/package/classmcp" target="_blank" rel="noopener">classmcp</a> &middot; <a href="https://classmcp.com?utm_source=github-pages&utm_medium=article&utm_campaign=classmcp&utm_content=featured-packages" target="_blank" rel="noopener">Website</a></p>
+          </div>
+
+          <div class="command-card">
+            <h3>Classpresso &mdash; Post-Build CSS Optimization</h3>
+            <p class="command-desc">Consolidates CSS classes after build for 50% faster style recalculation with zero runtime overhead. Auto-added as a devDependency in CSS-enabled profiles. Runs automatically after <code>pnpm build</code>.</p>
+            <pre class="language-bash"><code class="language-bash">pnpm add -D classpresso</code></pre>
+            <p>npm: <a href="https://www.npmjs.com/package/classpresso" target="_blank" rel="noopener">classpresso</a> &middot; <a href="https://classpresso.com?utm_source=github-pages&utm_medium=article&utm_campaign=classpresso&utm_content=featured-packages" target="_blank" rel="noopener">Website</a></p>
+          </div>
+
+          <div class="command-card">
+            <h3>TerseJSON &mdash; Memory-Efficient JSON (Optional)</h3>
+            <p class="command-desc">Proxy-based lazy JSON expansion achieving ~70% memory reduction for large payloads. <strong>Not auto-included</strong> &mdash; install only if your project handles large JSON datasets.</p>
+            <pre class="language-bash"><code class="language-bash">pnpm add tersejson</code></pre>
+            <p>npm: <a href="https://www.npmjs.com/package/tersejson" target="_blank" rel="noopener">tersejson</a> &middot; <a href="https://tersejson.com?utm_source=github-pages&utm_medium=article&utm_campaign=tersejson&utm_content=featured-packages" target="_blank" rel="noopener">Website</a></p>
           </div>
         </div>
       </section>
@@ -454,7 +489,7 @@ cp .claude/hooks/check-rulecatch.sh ~/.claude/hooks/</code></pre>
           </div>
           <div class="troubleshooting-item">
             <h4>RuleCatch Not Monitoring</h4>
-            <p><strong>RuleCatch is optional</strong> &mdash; the kit works fully without it. If you want it: install AI-Pooler: <code>npx @rulecatch/ai-pooler init</code>. Verify <code>RULECATCH_API_KEY</code> in <code>.env</code>. Run <code>pnpm ai:monitor</code> in a separate terminal.</p>
+            <p><strong>Free monitor mode requires no setup.</strong> Open a separate terminal and run <code>pnpm ai:monitor</code> (or <code>npx @rulecatch/ai-pooler monitor --no-api-key</code>). For full violation tracking, sign up at <a href="https://rulecatch.ai" target="_blank" rel="noopener">rulecatch.ai</a> and run <code>npx @rulecatch/ai-pooler init --api-key=YOUR_KEY --region=us</code>.</p>
           </div>
         </div>
       </section>
@@ -940,7 +975,7 @@ fi</code></pre>
         <p>Invoke these with <code>/command</code> in any Claude Code session. Each command is a markdown file in <code>.claude/commands/</code> that gives Claude specific instructions and tool permissions.</p>
 
         <div class="callout" style="background: var(--bg-secondary); border-left: 4px solid var(--accent-amber); padding: 1rem 1.25rem; border-radius: 0.5rem; margin-bottom: 1.5rem;">
-          <strong>New:</strong> See everything your AI does in real-time &rarr; <code>/what-is-my-ai-doing</code> (requires <a href="#monitor-your-rules">RuleCatch.AI</a>)
+          <strong>Try it now:</strong> See everything your AI does in real-time &rarr; run <code>pnpm ai:monitor</code> in a separate terminal (free, no API key needed)
         </div>
 
         <div class="commands-grid">
@@ -997,17 +1032,18 @@ fi</code></pre>
 
           <div class="command-card">
             <h3><code>/what-is-my-ai-doing</code></h3>
-            <p class="command-desc" style="background: rgba(251, 191, 36, 0.1); border-left: 3px solid var(--accent-amber); padding: 0.5rem 0.75rem; border-radius: 0.25rem; margin-bottom: 0.75rem;"><strong>Requires <a href="https://rulecatch.ai?utm_source=github-pages&utm_medium=article&utm_campaign=rulecatch&utm_content=tutorial" target="_blank" rel="noopener">RuleCatch.AI</a></strong> &mdash; see <a href="#monitor-your-rules">Monitor Your Rules</a> to set it up.</p>
-            <p class="command-desc">Launches the RuleCatch AI-Pooler live monitor in a separate terminal. See everything your AI is doing in real time:</p>
+            <p class="command-desc" style="background: rgba(34, 197, 94, 0.1); border-left: 3px solid var(--accent-green); padding: 0.5rem 0.75rem; border-radius: 0.25rem; margin-bottom: 0.75rem;"><strong>Free monitor mode</strong> &mdash; no API key, no account, no setup. Just open a separate terminal and run it.</p>
+            <p class="command-desc">Launches the RuleCatch AI-Pooler live monitor in a <strong>separate terminal</strong>. See everything your AI is doing in real time:</p>
             <ul>
               <li>Every tool call (Read, Write, Edit, Bash)</li>
               <li>Token usage and cost per turn</li>
-              <li>Rule violations as they happen</li>
               <li>Which files are being accessed</li>
+              <li>Cost per session</li>
             </ul>
-            <pre class="language-bash"><code class="language-bash"># Run in a separate terminal
-npx @rulecatch/ai-pooler@latest monitor -v</code></pre>
+            <pre class="language-bash"><code class="language-bash"># Open a separate terminal and run this while Claude works
+npx @rulecatch/ai-pooler monitor --no-api-key</code></pre>
             <p>Zero token overhead &mdash; runs completely outside Claude's context. Also available as <code>pnpm ai:monitor</code>.</p>
+            <p style="font-size: 0.85rem; opacity: 0.8;"><strong>Want more?</strong> With a <a href="https://rulecatch.ai?utm_source=github-pages&utm_medium=article&utm_campaign=rulecatch&utm_content=tutorial" target="_blank" rel="noopener">RuleCatch.AI</a> API key you also get violation tracking, dashboards, and the MCP server. See <a href="#monitor-your-rules">Monitor Your Rules</a>.</p>
           </div>
 
           <div class="command-card">
@@ -1198,6 +1234,7 @@ npx @rulecatch/ai-pooler@latest monitor -v</code></pre>
               <tr><td><strong>Database</strong></td><td>MongoDB, PostgreSQL, MySQL, MSSQL, SQLite</td><td>Centralized wrapper for each</td></tr>
               <tr><td><strong>Hosting</strong></td><td>Dokploy, Vercel, Static</td><td>Deploy scripts + Docker</td></tr>
               <tr><td><strong>Testing</strong></td><td>Vitest, Playwright, pytest, Go test</td><td>Framework-appropriate setup</td></tr>
+              <tr><td><strong>CSS</strong></td><td>Tailwind CSS + ClassMCP + Classpresso</td><td>ClassMCP (MCP) + Classpresso (post-build) auto-included in CSS profiles</td></tr>
             </tbody>
           </table>
         </div>
@@ -1528,7 +1565,7 @@ pnpm content:dry-run            # Preview what would build</code></pre>
             <tr><td><code>pnpm content:list</code></td><td>List all articles</td></tr>
             <tr><td><code>pnpm content:dry-run</code></td><td>Preview what would build</td></tr>
             <tr><td colspan="2"><strong>Monitoring &amp; Docker</strong></td></tr>
-            <tr><td><code>pnpm ai:monitor</code></td><td>Live AI activity monitor (run in separate terminal)</td></tr>
+            <tr><td><code>pnpm ai:monitor</code></td><td>Free monitor mode &mdash; live AI activity (run in separate terminal, no API key needed)</td></tr>
             <tr><td><code>pnpm docker:optimize</code></td><td>Audit Dockerfile (use <code>/optimize-docker</code> in Claude)</td></tr>
             <tr><td colspan="2"><strong>Utility</strong></td></tr>
             <tr><td><code>pnpm clean</code></td><td>Remove dist/, coverage/, test-results/</td></tr>
@@ -1830,9 +1867,16 @@ Step 3 (Auth System): Implement JWT authentication</code></pre>
         <div class="rulecatch-section">
           <div class="rulecatch-content">
             <div class="rulecatch-intro">
-              <p><strong>RuleCatch is optional.</strong> The starter kit works fully without it &mdash; all hooks, commands, and quality gates function independently. If RuleCatch isn't installed, the <code>check-rulecatch.sh</code> hook simply skips silently with zero overhead.</p>
-              <p><strong>Full disclosure:</strong> RuleCatch.AI is built by <a href="https://github.com/TheDecipherist" target="_blank" rel="noopener">TheDecipherist</a> &mdash; the same developer behind this starter kit. It's included because it's an integral part of the workflow this kit teaches, and it's purpose-built for catching the exact issues AI-assisted development introduces. It is fully optional but recommended.</p>
-              <p><strong>Why you'd want it anyway:</strong> AI models break your CLAUDE.md rules more often than you'd expect &mdash; wrong language, skipped patterns, hardcoded values, ignored constraints. Code that looks right and passes linting, but violates your project's actual standards. <a href="https://rulecatch.ai?utm_source=github-pages&utm_medium=article&utm_campaign=rulecatch&utm_content=tutorial" target="_blank" rel="noopener"><strong>RuleCatch.AI</strong></a> bridges the gap between detecting these violations and fixing them. It monitors every tool call in real-time, and with the MCP server installed, Claude can query its own violations and generate fix plans &mdash; ask it: <em>"What rules am I breaking the most?"</em> or <em>"Create a plan to fix today's violations."</em></p>
+              <p><strong>Full disclosure:</strong> RuleCatch.AI is built by <a href="https://github.com/TheDecipherist" target="_blank" rel="noopener">TheDecipherist</a> &mdash; the same developer behind this starter kit. It's purpose-built for catching the exact issues AI-assisted development introduces.</p>
+
+              <h3>Try It Now &mdash; Free Monitor Mode</h3>
+              <p>See what your AI is doing in real-time. No API key, no account, no setup &mdash; just open a <strong>separate terminal</strong> and run:</p>
+              <pre class="language-bash"><code class="language-bash"># Open a separate terminal and run this while Claude works
+npx @rulecatch/ai-pooler monitor --no-api-key</code></pre>
+              <p>Also available as <code>pnpm ai:monitor</code>. You'll instantly see every tool call, token count, cost per turn, and which files Claude is touching &mdash; all updating live. Zero token overhead. This is the free preview that lets you see what you've been missing.</p>
+
+              <h3>Unlock the Full Experience</h3>
+              <p><strong>Why you'd want it:</strong> AI models break your CLAUDE.md rules more often than you'd expect &mdash; wrong language, skipped patterns, hardcoded values, ignored constraints. Code that looks right and passes linting, but violates your project's actual standards. <a href="https://rulecatch.ai?utm_source=github-pages&utm_medium=article&utm_campaign=rulecatch&utm_content=tutorial" target="_blank" rel="noopener"><strong>RuleCatch.AI</strong></a> bridges the gap between detecting these violations and fixing them.</p>
             </div>
 
             <div class="rulecatch-features">
@@ -1841,8 +1885,8 @@ Step 3 (Auth System): Implement JWT authentication</code></pre>
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
                 </div>
                 <div>
-                  <h4>AI-Pooler</h4>
-                  <p>Collects tool calls from Claude via hooks. Runs outside the AI context &mdash; zero token overhead, invisible to the model. Also gives you a live terminal view of tokens, cost, violations, and tool usage as you work</p>
+                  <h4>AI-Pooler (Free Monitor Mode)</h4>
+                  <p>Free monitor mode works instantly &mdash; no API key needed. See every tool call, token, cost, and file access in a live terminal view. With an API key: adds persistent violation tracking, session history, and cost analytics</p>
                 </div>
               </div>
 
@@ -1883,8 +1927,8 @@ Step 3 (Auth System): Implement JWT authentication</code></pre>
             </div>
 
             <div class="rulecatch-install">
-              <h4>Quick Setup</h4>
-              <pre class="language-bash"><code class="language-bash"># Install the AI-Pooler (hooks into Claude Code automatically)
+              <h4>Full Setup (with API Key)</h4>
+              <pre class="language-bash"><code class="language-bash"># Install the AI-Pooler with your API key (hooks into Claude Code automatically)
 npx @rulecatch/ai-pooler init --api-key=dc_your_key --region=us
 
 # Add the MCP server to query violations from Claude
@@ -1894,7 +1938,7 @@ npx @rulecatch/mcp-server init</code></pre>
 
             <div class="rulecatch-screenshot">
               <img src="ai-pooler-monitor.webp" alt="RuleCatch AI-Pooler Monitor — real-time session tracking showing tokens, cost, violations, and tool usage">
-              <p class="rulecatch-caption">The AI-Pooler CLI also gives you a live terminal view &mdash; tokens, cost, violations, and tool usage updating in real time as you work.</p>
+              <p class="rulecatch-caption">The AI-Pooler free monitor in action &mdash; tokens, cost, and tool usage updating in real time. Try it now: open a separate terminal and run <code>npx @rulecatch/ai-pooler monitor --no-api-key</code></p>
             </div>
 
             <div class="rulecatch-cta">
@@ -1940,6 +1984,15 @@ npx @rulecatch/mcp-server init</code></pre>
             <p><strong>How it works:</strong> Uses Playwright's accessibility tree (not screenshots) &mdash; fast, lightweight, and LLM-friendly. Supports Chrome, Firefox, WebKit, and 143+ device emulation profiles</p>
             <pre class="language-bash"><code class="language-bash">claude mcp add playwright -- npx -y @playwright/mcp@latest</code></pre>
             <p>npm: <a href="https://www.npmjs.com/package/@playwright/mcp" target="_blank" rel="noopener">@playwright/mcp</a> &middot; <a href="https://github.com/microsoft/playwright-mcp" target="_blank" rel="noopener">GitHub</a></p>
+          </div>
+
+          <div class="command-card">
+            <h3>ClassMCP &mdash; Semantic CSS for AI</h3>
+            <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 0.5rem;"><strong>By <a href="https://github.com/TheDecipherist" target="_blank" rel="noopener">TheDecipherist</a></strong> &mdash; open source (MIT license)</p>
+            <p class="command-desc">MCP server that provides semantic CSS class patterns to Claude, reducing token usage when working with styles. Instead of Claude guessing class names or hallucinating utility classes, ClassMCP feeds it the correct patterns from your project's CSS framework. Auto-included in all CSS-enabled profiles.</p>
+            <p><strong>What it solves:</strong> Hallucinated CSS class names, inconsistent styling patterns, wasted tokens on style guessing</p>
+            <pre class="language-bash"><code class="language-bash">claude mcp add classmcp -- npx -y classmcp@latest</code></pre>
+            <p>npm: <a href="https://www.npmjs.com/package/classmcp" target="_blank" rel="noopener">classmcp</a> &middot; <a href="https://classmcp.com?utm_source=github-pages&utm_medium=article&utm_campaign=classmcp&utm_content=mcp-servers" target="_blank" rel="noopener">Website</a></p>
           </div>
 
           <div class="command-card">

@@ -34,6 +34,8 @@
 | `pnpm content:build` | Build all published markdown → HTML |
 | `pnpm content:build:id <id>` | Build a single article by ID |
 | `pnpm content:list` | List all articles and their status |
+| **CSS Optimization** | |
+| `pnpm build:optimize` | Post-build CSS class consolidation via Classpresso (runs automatically after `pnpm build`) |
 | **Docker** | |
 | `pnpm docker:optimize` | Audit Dockerfile against 12 best practices (use `/optimize-docker` in Claude) |
 | **Getting Started** | |
@@ -49,8 +51,8 @@
 | `/remove-project <name>` | Remove a project from registry and optionally delete from disk |
 | `/convert-project-to-starter-kit` | Merge starter kit into an existing project (non-destructive) |
 | **RuleCatch** | |
-| `pnpm ai:monitor` | Live view of AI activity — tokens, cost, violations, tool usage (separate terminal) |
-| `/what-is-my-ai-doing` | Same as above — launches AI-Pooler monitor |
+| `pnpm ai:monitor` | Free monitor mode — live AI activity in a separate terminal (no API key needed) |
+| `/what-is-my-ai-doing` | Same as above — launches AI-Pooler free monitor |
 | **Git** | |
 | `/worktree <name>` | Create isolated branch + worktree for a task (never touch main) |
 | **Code Quality** | |
@@ -478,6 +480,42 @@ docker_test_before_push = false
 ```
 
 This gate applies globally — every command or workflow that pushes to Docker Hub must respect it.
+
+---
+
+## Featured Packages
+
+Three open-source packages by [TheDecipherist](https://github.com/TheDecipherist) (the developer of this starter kit) are integrated into CSS-enabled profiles. All are MIT-licensed.
+
+### ClassMCP (MCP Server) — Semantic CSS for AI
+
+Provides semantic CSS class patterns to Claude via MCP, reducing token usage when working with styles. Auto-included in CSS-enabled profiles (`mcp` field in `claude-mastery-project.conf`).
+
+```bash
+claude mcp add classmcp -- npx -y classmcp@latest
+```
+
+npm: [classmcp](https://www.npmjs.com/package/classmcp)
+
+### Classpresso — Post-Build CSS Optimization
+
+Consolidates CSS classes after build for 50% faster style recalculation with zero runtime overhead. Auto-included as a devDependency in CSS-enabled profiles; runs via `pnpm build:optimize` (also auto-runs as `postbuild`).
+
+```bash
+pnpm add -D classpresso
+```
+
+npm: [classpresso](https://www.npmjs.com/package/classpresso)
+
+### TerseJSON (Optional) — Memory-Efficient JSON
+
+Proxy-based lazy JSON expansion achieving ~70% memory reduction. **Not auto-included** — install only if your project handles large JSON payloads.
+
+```bash
+pnpm add tersejson
+```
+
+npm: [tersejson](https://www.npmjs.com/package/tersejson)
 
 ---
 

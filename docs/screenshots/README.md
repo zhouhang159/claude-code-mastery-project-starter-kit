@@ -37,10 +37,10 @@
 - **How:** Run `/setup` and capture the interactive question/answer flow
 - **Shows:** Category-by-category configuration with prompts and confirmations
 
-### 7. `/what-is-my-ai-doing` Monitor
+### 7. `/what-is-my-ai-doing` Monitor (Free Mode)
 - **File:** `ai-monitor.png`
-- **How:** Run `pnpm ai:monitor` in a separate terminal while Claude works
-- **Shows:** Live tool calls, token usage, cost, and violation stream
+- **How:** Run `pnpm ai:monitor` (or `npx @rulecatch/ai-pooler monitor --no-api-key`) in a **separate terminal** while Claude works
+- **Shows:** Live tool calls, token usage, cost — free monitor mode, no API key needed
 
 ### 8. E2E Test Assertions (Good vs Bad)
 - **File:** `e2e-assertions.png`
