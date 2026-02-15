@@ -65,15 +65,16 @@ Use `/help` to see all 23 commands at any time.
 
 ## See It In Action
 
-<!-- Record with: asciinema rec demo.cast && agg demo.cast docs/demo.gif -->
-![Starter Kit Demo](docs/demo.gif)
-
-*Clone → `/setup` → `/diagram all` → hooks firing on file edit → `/review` catching issues*
-
-<!-- Capture /progress output as a screenshot -->
-![Slash Commands](docs/commands-preview.png)
-
-> **Screenshots needed:** See `docs/screenshots/README.md` for the 8 screenshots and 3 animated recordings that complete this section.
+| | |
+|---|---|
+| ![/help command](docs/screenshots/help-command.png) | ![/review violations](docs/screenshots/review-violations.png) |
+| **`/help`** &mdash; All 23 commands | **`/review`** &mdash; Catching violations with severity ratings |
+| ![Auto-branch hook](docs/screenshots/auto-branch.png) | ![Lint-on-save hook](docs/screenshots/hooks-lint-on-save.png) |
+| **Auto-Branching** &mdash; Hook blocks commits to main | **Lint-on-Save** &mdash; TypeScript errors caught instantly |
+| ![/diagram architecture](docs/screenshots/diagram-architecture.png) | ![/setup flow](docs/screenshots/setup-flow.png) |
+| **`/diagram architecture`** &mdash; Generated from actual code | **`/setup`** &mdash; Interactive .env configuration |
+| ![AI Monitor](docs/screenshots/ai-monitor.png) | ![E2E assertions](docs/screenshots/e2e-assertions.png) |
+| **AI Monitor** &mdash; Free mode, no API key needed | **E2E Tests** &mdash; Good vs bad assertions |
 
 ## What's Included
 

@@ -2006,12 +2006,77 @@ npx @rulecatch/mcp-server init</code></pre>
         <p>See the <a href="https://github.com/TheDecipherist/claude-code-mastery" target="_blank" rel="noopener">Claude Code Mastery Guide</a> for the complete MCP server directory.</p>
       </section>
 
-      <!-- Screenshot Gallery (placeholder) -->
+      <!-- Screenshot Gallery -->
       <section id="screenshot-gallery">
         <h2>Screenshots</h2>
-        <p>Visual examples of the starter kit in action. See <code>docs/screenshots/README.md</code> for capture instructions.</p>
-        <div class="callout" style="background: var(--bg-secondary); border-left: 4px solid var(--accent-amber); padding: 1rem 1.25rem; border-radius: 0.5rem;">
-          <strong>Coming soon:</strong> Screenshots of <code>/help</code> output, <code>/review</code> catching violations, auto-branching, hooks firing, <code>/diagram</code> output, <code>/setup</code> flow, AI monitor, and E2E test assertions. Contribute by following the guide in <code>docs/screenshots/README.md</code>.
+        <p>The starter kit in action &mdash; every screenshot is from real command output.</p>
+
+        <div class="screenshot-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+
+          <div class="screenshot-card" style="background: var(--bg-secondary); border-radius: 0.75rem; overflow: hidden; border: 1px solid var(--border);">
+            <img src="screenshots/help-command.png" alt="/help command output showing all 23 commands" style="width: 100%; display: block;" loading="lazy">
+            <div style="padding: 0.75rem 1rem;">
+              <strong><code>/help</code> Command Output</strong>
+              <p style="margin: 0.25rem 0 0; color: var(--text-secondary); font-size: 0.875rem;">All 23 commands organized by category &mdash; Setup, Code Quality, Git, API, Documentation, Monitoring</p>
+            </div>
+          </div>
+
+          <div class="screenshot-card" style="background: var(--bg-secondary); border-radius: 0.75rem; overflow: hidden; border: 1px solid var(--border);">
+            <img src="screenshots/review-violations.png" alt="/review catching violations with severity badges" style="width: 100%; display: block;" loading="lazy">
+            <div style="padding: 0.75rem 1rem;">
+              <strong><code>/review</code> Catching Violations</strong>
+              <p style="margin: 0.25rem 0 0; color: var(--text-secondary); font-size: 0.875rem;">Severity-rated findings with file:line references, fix suggestions, and CLAUDE.md rule citations</p>
+            </div>
+          </div>
+
+          <div class="screenshot-card" style="background: var(--bg-secondary); border-radius: 0.75rem; overflow: hidden; border: 1px solid var(--border);">
+            <img src="screenshots/auto-branch.png" alt="Auto-branch hook blocking commit on main" style="width: 100%; display: block;" loading="lazy">
+            <div style="padding: 0.75rem 1rem;">
+              <strong>Auto-Branching on Commit</strong>
+              <p style="margin: 0.25rem 0 0; color: var(--text-secondary); font-size: 0.875rem;">Hook blocks commits to main and suggests feature branches &mdash; zero-friction branch safety</p>
+            </div>
+          </div>
+
+          <div class="screenshot-card" style="background: var(--bg-secondary); border-radius: 0.75rem; overflow: hidden; border: 1px solid var(--border);">
+            <img src="screenshots/hooks-lint-on-save.png" alt="Lint-on-save hook catching TypeScript error" style="width: 100%; display: block;" loading="lazy">
+            <div style="padding: 0.75rem 1rem;">
+              <strong>Hooks Firing (lint-on-save)</strong>
+              <p style="margin: 0.25rem 0 0; color: var(--text-secondary); font-size: 0.875rem;">TypeScript error caught immediately after file write &mdash; PostToolUse hook in action</p>
+            </div>
+          </div>
+
+          <div class="screenshot-card" style="background: var(--bg-secondary); border-radius: 0.75rem; overflow: hidden; border: 1px solid var(--border);">
+            <img src="screenshots/diagram-architecture.png" alt="/diagram architecture generating ASCII box diagram" style="width: 100%; display: block;" loading="lazy">
+            <div style="padding: 0.75rem 1rem;">
+              <strong><code>/diagram architecture</code> Output</strong>
+              <p style="margin: 0.25rem 0 0; color: var(--text-secondary); font-size: 0.875rem;">ASCII box-drawing diagram generated from actual source files &mdash; Client, API, Handler, Adapter layers</p>
+            </div>
+          </div>
+
+          <div class="screenshot-card" style="background: var(--bg-secondary); border-radius: 0.75rem; overflow: hidden; border: 1px solid var(--border);">
+            <img src="screenshots/setup-flow.png" alt="/setup interactive configuration flow" style="width: 100%; display: block;" loading="lazy">
+            <div style="padding: 0.75rem 1rem;">
+              <strong><code>/setup</code> Interactive Flow</strong>
+              <p style="margin: 0.25rem 0 0; color: var(--text-secondary); font-size: 0.875rem;">Category-by-category .env configuration &mdash; GitHub, Database, Docker, Analytics, RuleCatch</p>
+            </div>
+          </div>
+
+          <div class="screenshot-card" style="background: var(--bg-secondary); border-radius: 0.75rem; overflow: hidden; border: 1px solid var(--border);">
+            <img src="screenshots/ai-monitor.png" alt="AI-Pooler free monitor showing live tool calls and cost" style="width: 100%; display: block;" loading="lazy">
+            <div style="padding: 0.75rem 1rem;">
+              <strong>AI Monitor &mdash; Free Mode</strong>
+              <p style="margin: 0.25rem 0 0; color: var(--text-secondary); font-size: 0.875rem;">Live view of tool calls, tokens, cost, and files accessed &mdash; <code>npx @rulecatch/ai-pooler monitor --no-api-key</code></p>
+            </div>
+          </div>
+
+          <div class="screenshot-card" style="background: var(--bg-secondary); border-radius: 0.75rem; overflow: hidden; border: 1px solid var(--border);">
+            <img src="screenshots/e2e-assertions.png" alt="E2E test comparison: good assertions vs bad" style="width: 100%; display: block;" loading="lazy">
+            <div style="padding: 0.75rem 1rem;">
+              <strong>E2E Test Assertions: Good vs Bad</strong>
+              <p style="margin: 0.25rem 0 0; color: var(--text-secondary); font-size: 0.875rem;">Side-by-side comparison &mdash; a test that passes when broken vs one with real assertions</p>
+            </div>
+          </div>
+
         </div>
       </section>
 
