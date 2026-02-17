@@ -356,6 +356,16 @@ Go Mode scaffolds a Go project with standard layout conventions (`cmd/`, `intern
 - **SQLite** — Embedded, file-based, zero config
 - **None** — No database
 
+#### Question G3.1: MongoDB Connection String (only if MongoDB selected in G3)
+"Do you want to configure your MongoDB connection now?"
+- **Yes, I have a connection string** — User pastes their full `mongodb+srv://...` URI. Write it to `.env` as `MONGODB_URI=<their-value>` and set `MONGO_DB_NAME` from the URI path segment.
+- **No, I'll set it up later** — Skip. Leave `MONGODB_URI` placeholder in `.env.example` only.
+
+If the user provides a connection string:
+1. Write `MONGODB_URI=<value>` to the project's `.env`
+2. Extract the database name from the URI path (e.g., `mongodb+srv://user:pass@cluster/mydb` → `MONGO_DB_NAME=mydb`)
+3. If no database name in URI, ask: "What should the database be called?" and append it to the URI
+
 #### Question G4: Hosting / Deployment
 "Where will this be deployed?" (same as Node.js options)
 - **Dokploy on Hostinger VPS** — Self-hosted Docker containers (Recommended)
@@ -803,6 +813,16 @@ Python Mode scaffolds a Python project with modern tooling: type hints, async su
 - **SQLite** — Embedded, zero config
 - **MongoDB** — Document database
 - **None** — No database
+
+#### Question P3.1: MongoDB Connection String (only if MongoDB selected in P3)
+"Do you want to configure your MongoDB connection now?"
+- **Yes, I have a connection string** — User pastes their full `mongodb+srv://...` or `mongodb://...` URI. Write it to `.env` as `MONGODB_URI=<their-value>` and set `MONGO_DB_NAME` from the URI path segment.
+- **No, I'll set it up later** — Skip. Leave `MONGODB_URI` placeholder in `.env.example` only.
+
+If the user provides a connection string:
+1. Write `MONGODB_URI=<value>` to the project's `.env`
+2. Extract the database name from the URI path (e.g., `mongodb+srv://user:pass@cluster/mydb` → `MONGO_DB_NAME=mydb`)
+3. If no database name in URI, ask: "What should the database be called?" and append it to the URI
 
 #### Question P4: Package Manager
 "Which package manager?"
@@ -1288,6 +1308,16 @@ If they chose Vite + React and want SSR, switch to **Next.js (App Router)** or a
 - **Docker** — Containerized deployment (auto-included with Dokploy)
 - **GitHub Actions CI** — Automated testing pipeline
 - **Multi-region** — US + EU deployment (Dokploy only)
+
+### Question 7: MongoDB Connection String (only if `mongo` database selected)
+"Do you want to configure your MongoDB connection now?"
+- **Yes, I have a connection string** — User pastes their full `mongodb+srv://...` or `mongodb://...` URI. Write it to `.env` as `MONGODB_URI=<their-value>` and set `MONGO_DB_NAME` from the URI path segment.
+- **No, I'll set it up later** — Skip. Leave `MONGODB_URI` placeholder in `.env.example` only.
+
+If the user provides a connection string:
+1. Write `MONGODB_URI=<value>` to the project's `.env`
+2. Extract the database name from the URI path (e.g., `mongodb+srv://user:pass@cluster/mydb` → `MONGO_DB_NAME=mydb`)
+3. If no database name in URI, ask: "What should the database be called?" and append it to the URI
 
 ## Step 2 — Create the Project
 
