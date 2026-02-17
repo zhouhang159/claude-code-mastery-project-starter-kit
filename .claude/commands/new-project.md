@@ -164,7 +164,7 @@ project/
 ├── CLAUDE.local.md        # Personal overrides template
 ├── .claude/
 │   ├── settings.json      # Hooks configuration
-│   ├── commands/          # Only scope: project commands (16 of 25)
+│   ├── commands/          # Only scope: project commands (16 of 26)
 │   │   ├── architecture.md
 │   │   ├── commit.md
 │   │   ├── create-api.md
@@ -1353,7 +1353,39 @@ If the user provides a connection string:
 
 ## Step 2 — Create the Project
 
-Based on answers, scaffold the project:
+Based on answers, scaffold the project.
+
+### Default Profile Batch Script
+
+**If the resolved choices exactly match the default profile** (fullstack + next + mongo + tailwind + docker + pnpm), use the batch scaffold script for maximum speed:
+
+```bash
+bash "$(pwd)/scripts/scaffold-default.sh" "$PROJECT_PATH" "$PROJECT_NAME" "$(pwd)"
+```
+
+The script handles ALL of the following in one execution with progress indicators:
+- Creates all directories (src/, .claude/, project-docs/, tests/, scripts/, .github/)
+- Copies 16 project-scoped commands, 2 skills, 2 agents, all 9 hooks
+- Writes settings.json (full 9-hook config)
+- Copies MongoDB wrapper (src/core/db/index.ts) + query system
+- Creates Next.js app structure (layout, page, API health route, instrumentation)
+- Creates TypeScript, Next.js, Tailwind, PostCSS, Vitest, Playwright configs
+- Creates package.json with all deps/scripts
+- Creates Dockerfile (multi-stage standalone)
+- Creates GitHub Actions CI workflow
+- Creates CLAUDE.md (all rules), CLAUDE.local.md
+- Creates project-docs templates, test templates, SEO files
+- Creates .env, .env.example, .gitignore, .dockerignore, README.md
+- Creates populated features.json manifest
+- Runs pnpm install, initializes git, registers project
+
+**Do NOT create files individually when using the default profile — the script handles everything.**
+
+After the script completes, display the verification checklist (the script output includes a summary).
+
+### Manual Scaffolding (non-default profiles)
+
+For profiles other than `default` and `clean`, scaffold manually:
 
 1. Create project directory
 2. Initialize with chosen framework and package manager
@@ -2140,6 +2172,47 @@ Examples:
 ### Create Default Config
 
 When scaffolding the starter kit itself, create `claude-mastery-project.conf` with the profiles above as starting templates. Users customize to their preferences.
+
+## Feature Manifest — MANDATORY Final Step (ALL modes except Clean)
+
+**After scaffolding completes and BEFORE the final verification checklist**, write `.claude/features.json` to the new project based on what was scaffolded.
+
+### Map scaffolding choices to features
+
+| Scaffolding Choice | Feature Name | Files to List |
+|-------------------|-------------|---------------|
+| `database = mongo` | `mongo` | `src/core/db/index.ts`, `scripts/db-query.ts`, `scripts/queries/example-find-user.ts`, `scripts/queries/example-count-docs.ts` |
+| `database = postgres\|mysql\|mssql\|sqlite` | `postgres` | `src/core/db/sql.ts` |
+| Vitest installed | `vitest` | `vitest.config.ts` |
+| Playwright installed | `playwright` | `playwright.config.ts` |
+| Docker selected | `docker` | `Dockerfile` |
+| Content pipeline | `content` | `scripts/build-content.ts`, `scripts/content.config.json` |
+
+### Write the manifest
+
+```json
+{
+  "schemaVersion": 1,
+  "installedBy": "claude-code-mastery-starter-kit",
+  "language": "<node|go|python>",
+  "features": {
+    "<feature-name>": {
+      "version": "1.0.0",
+      "installedAt": "<current-ISO-timestamp>",
+      "updatedAt": null,
+      "files": ["<list-of-files>"]
+    }
+  }
+}
+```
+
+Write to `$PROJECT_PATH/.claude/features.json`.
+
+**For Clean mode:** The scaffold-clean.sh script already creates an empty manifest (`"features": {}`). No additional action needed.
+
+**For Go/Python modes:** Map the same features (e.g., Go with MongoDB → `mongo` feature with `internal/database/mongo.go` in files).
+
+---
 
 ## Verification Checklist
 

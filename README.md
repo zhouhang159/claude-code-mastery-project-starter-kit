@@ -61,14 +61,14 @@ cd ~/projects/my-app               # Enter your new project
 pnpm install && pnpm dev           # Start building
 ```
 
-Use `/help` to see all 25 commands at any time.
+Use `/help` to see all 26 commands at any time.
 
 ## See It In Action
 
 | | |
 |---|---|
 | ![/help command](docs/screenshots/help-command.png) | ![/review violations](docs/screenshots/review-violations.png) |
-| **`/help`** &mdash; All 25 commands | **`/review`** &mdash; Catching violations with severity ratings |
+| **`/help`** &mdash; All 26 commands | **`/review`** &mdash; Catching violations with severity ratings |
 | ![Auto-branch hook](docs/screenshots/auto-branch.png) | ![Lint-on-save hook](docs/screenshots/hooks-lint-on-save.png) |
 | **Auto-Branching** &mdash; Hook blocks commits to main | **Lint-on-Save** &mdash; TypeScript errors caught instantly |
 | ![/diagram architecture](docs/screenshots/diagram-architecture.png) | ![/setup flow](docs/screenshots/setup-flow.png) |
@@ -82,7 +82,7 @@ Everything you need to start a Claude Code project the right way — security, a
 
 - **CLAUDE.md** — Battle-tested project instructions with 11 numbered critical rules for security, TypeScript, database wrappers, testing, and deployment
 - **Global CLAUDE.md** — Security gatekeeper for all projects. Never publish secrets, never commit .env files, standardized scaffolding rules
-- **25 Slash Commands** (16 project + 9 kit management) — `/help`, `/quickstart`, `/install-global`, `/setup`, `/show-user-guide`, `/diagram`, `/review`, `/commit`, `/progress`, `/test-plan`, `/architecture`, `/new-project`, `/security-check`, `/optimize-docker`, `/create-e2e`, `/create-api`, `/worktree`, `/what-is-my-ai-doing`, `/refactor`, `/set-project-profile-default`, `/add-project-setup`, `/projects-created`, `/remove-project`, `/convert-project-to-starter-kit`, `/update-project`
+- **26 Slash Commands** (16 project + 10 kit management) — `/help`, `/quickstart`, `/install-global`, `/setup`, `/show-user-guide`, `/diagram`, `/review`, `/commit`, `/progress`, `/test-plan`, `/architecture`, `/new-project`, `/security-check`, `/optimize-docker`, `/create-e2e`, `/create-api`, `/worktree`, `/what-is-my-ai-doing`, `/refactor`, `/set-project-profile-default`, `/add-project-setup`, `/projects-created`, `/remove-project`, `/convert-project-to-starter-kit`, `/update-project`, `/add-feature`
 - **9 Hooks** — Deterministic enforcement that always runs. Block secrets, lint on save, verify no credentials, branch protection, port conflicts, Rybbit pre-deploy gate, E2E test gate, env sync warnings, and RuleCatch monitoring (optional — skips silently if not installed)
 - **Skills** — Context-aware templates: systematic code review checklist and full microservice scaffolding
 - **Custom Agents** — Read-only code reviewer for security audits. Test writer that creates tests with explicit assertions
@@ -305,6 +305,7 @@ project/
 │   │   ├── remove-project.md     # /remove-project — remove a project from registry
 │   │   ├── convert-project-to-starter-kit.md # /convert-project-to-starter-kit — merge into existing project
 │   │   ├── update-project.md      # /update-project — update a project with latest starter kit
+│   │   ├── add-feature.md         # /add-feature — add capabilities post-scaffolding
 │   │   └── show-user-guide.md    # /show-user-guide — open the User Guide in browser
 │   ├── skills/
 │   │   ├── code-review/SKILL.md # Triggered code review checklist
@@ -800,6 +801,16 @@ Updates an existing starter-kit project with the latest commands, hooks, skills,
 ```bash
 /update-project              # Pick from registered projects
 /update-project --force      # Skip confirmation prompts
+```
+
+### `/add-feature`
+
+Add capabilities (MongoDB, Docker, testing, etc.) to an existing project after scaffolding. Idempotent — safely updates already-installed features to the latest version. Maintains a feature manifest (`.claude/features.json`) so `/update-project` can sync feature files too.
+
+```bash
+/add-feature mongo            # Add MongoDB wrapper + query system
+/add-feature vitest playwright # Add both test frameworks
+/add-feature --list           # Show all available features
 ```
 
 ### `/create-e2e`

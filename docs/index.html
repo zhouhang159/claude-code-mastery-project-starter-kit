@@ -219,8 +219,8 @@
             <div class="feature-icon feature-icon-blue">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
             </div>
-            <h3>25 Slash Commands (16 project + 9 kit management)</h3>
-            <p><code>/help</code>, <code>/quickstart</code>, <code>/install-global</code>, <code>/setup</code>, <code>/show-user-guide</code>, <code>/diagram</code>, <code>/review</code>, <code>/commit</code>, <code>/progress</code>, <code>/test-plan</code>, <code>/architecture</code>, <code>/new-project</code>, <code>/security-check</code>, <code>/optimize-docker</code>, <code>/create-e2e</code>, <code>/create-api</code>, <code>/worktree</code>, <code>/what-is-my-ai-doing</code>, <code>/refactor</code>, <code>/set-project-profile-default</code>, <code>/add-project-setup</code>, <code>/projects-created</code>, <code>/remove-project</code>, <code>/convert-project-to-starter-kit</code>, <code>/update-project</code></p>
+            <h3>26 Slash Commands (16 project + 10 kit management)</h3>
+            <p><code>/help</code>, <code>/quickstart</code>, <code>/install-global</code>, <code>/setup</code>, <code>/show-user-guide</code>, <code>/diagram</code>, <code>/review</code>, <code>/commit</code>, <code>/progress</code>, <code>/test-plan</code>, <code>/architecture</code>, <code>/new-project</code>, <code>/security-check</code>, <code>/optimize-docker</code>, <code>/create-e2e</code>, <code>/create-api</code>, <code>/worktree</code>, <code>/what-is-my-ai-doing</code>, <code>/refactor</code>, <code>/set-project-profile-default</code>, <code>/add-project-setup</code>, <code>/projects-created</code>, <code>/remove-project</code>, <code>/convert-project-to-starter-kit</code>, <code>/update-project</code>, <code>/add-feature</code></p>
           </div>
 
           <div class="feature-card">
@@ -392,7 +392,7 @@
 cd ~/projects/my-app               # Enter your new project
 /setup                             # Configure .env interactively
 pnpm install && pnpm dev           # Start building</code></pre>
-        <p>Use <code>/help</code> to see all 25 commands at any time.</p>
+        <p>Use <code>/help</code> to see all 26 commands at any time.</p>
       </section>
 
       <!-- Quick Start -->
@@ -527,6 +527,7 @@ cp .claude/hooks/check-rulecatch.sh ~/.claude/hooks/</code></pre>
 │   │   ├── remove-project.md     # /remove-project — remove a project from registry
 │   │   ├── convert-project-to-starter-kit.md # /convert-project-to-starter-kit — merge into existing project
 │   │   ├── update-project.md      # /update-project — update a project with latest starter kit
+│   │   ├── add-feature.md         # /add-feature — add capabilities post-scaffolding
 │   │   └── show-user-guide.md    # /show-user-guide — open the User Guide in browser
 │   ├── skills/
 │   │   ├── code-review/SKILL.md # Triggered code review checklist
@@ -1228,6 +1229,14 @@ npx @rulecatch/ai-pooler monitor --no-api-key</code></pre>
             <p class="command-desc">Updates an existing starter-kit project with the latest commands, hooks, skills, agents, and rules. Smart merge &mdash; replaces starter kit files with newer versions while preserving any custom files. Shows a diff report before applying, creates a safety commit for easy undo.</p>
             <pre class="language-bash"><code class="language-bash">/update-project              # Pick from registered projects
 /update-project --force      # Skip confirmation prompts</code></pre>
+          </div>
+
+          <div class="command-card">
+            <h3><code>/add-feature &lt;name&gt;</code></h3>
+            <p class="command-desc">Add capabilities (MongoDB, Docker, testing, etc.) to an existing project after scaffolding. Idempotent &mdash; safely updates already-installed features. Maintains a feature manifest (<code>.claude/features.json</code>) so <code>/update-project</code> can sync feature files too.</p>
+            <pre class="language-bash"><code class="language-bash">/add-feature mongo            # Add MongoDB wrapper + query system
+/add-feature vitest playwright # Add both test frameworks
+/add-feature --list           # Show all available features</code></pre>
           </div>
         </div>
       </section>
@@ -2030,10 +2039,10 @@ npx @rulecatch/mcp-server init</code></pre>
         <div class="screenshot-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
 
           <div class="screenshot-card" style="background: var(--bg-secondary); border-radius: 0.75rem; overflow: hidden; border: 1px solid var(--border);">
-            <img src="screenshots/help-command.png" alt="/help command output showing all 25 commands" style="width: 100%; display: block;" loading="lazy">
+            <img src="screenshots/help-command.png" alt="/help command output showing all 26 commands" style="width: 100%; display: block;" loading="lazy">
             <div style="padding: 0.75rem 1rem;">
               <strong><code>/help</code> Command Output</strong>
-              <p style="margin: 0.25rem 0 0; color: var(--text-secondary); font-size: 0.875rem;">All 25 commands organized by category &mdash; Setup, Kit Management, Code Quality, Development, Infrastructure, Monitoring</p>
+              <p style="margin: 0.25rem 0 0; color: var(--text-secondary); font-size: 0.875rem;">All 26 commands organized by category &mdash; Setup, Kit Management, Code Quality, Development, Infrastructure, Monitoring</p>
             </div>
           </div>
 

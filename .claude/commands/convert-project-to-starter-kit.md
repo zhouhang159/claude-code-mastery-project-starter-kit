@@ -383,6 +383,50 @@ Report each file: `+ copied`, `merged (N lines added)`, or `skipped (exists)`
 
 ---
 
+## Step 7b — Generate Feature Manifest
+
+After language-specific files are copied, auto-detect which features were installed and write a manifest.
+
+1. Check which feature-related files now exist in `$TARGET`:
+   - `src/core/db/index.ts` → feature `mongo`
+   - `src/core/db/sql.ts` → feature `postgres`
+   - `vitest.config.ts` → feature `vitest`
+   - `playwright.config.ts` → feature `playwright`
+   - `scripts/build-content.ts` → feature `content`
+   - `Dockerfile` → feature `docker`
+
+2. For each detected feature, build a feature entry with the list of files that were actually copied.
+
+3. Write `$TARGET/.claude/features.json`:
+
+```json
+{
+  "schemaVersion": 1,
+  "installedBy": "claude-code-mastery-starter-kit",
+  "language": "<$LANGUAGE>",
+  "features": {
+    "<detected-feature>": {
+      "version": "1.0.0",
+      "installedAt": "<current-ISO-timestamp>",
+      "updatedAt": null,
+      "files": ["<list-of-files-that-exist>"]
+    }
+  }
+}
+```
+
+If no feature files were copied (user opted out of language-specific files), write an empty manifest:
+```json
+{
+  "schemaVersion": 1,
+  "installedBy": "claude-code-mastery-starter-kit",
+  "language": "<$LANGUAGE>",
+  "features": {}
+}
+```
+
+---
+
 ## Step 8 — Register in Project Registry
 
 1. Read `~/.claude/starter-kit-projects.json`

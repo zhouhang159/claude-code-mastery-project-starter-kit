@@ -10,7 +10,7 @@
 ### 1. `/help` Command Output
 - **File:** `help-command.png`
 - **How:** Run `/help` in Claude Code, capture the full grouped command list
-- **Shows:** All 25 commands organized by category (16 project + 9 kit management)
+- **Shows:** All 26 commands organized by category (16 project + 10 kit management)
 
 ### 2. `/review` Catching Violations
 - **File:** `review-violations.png`

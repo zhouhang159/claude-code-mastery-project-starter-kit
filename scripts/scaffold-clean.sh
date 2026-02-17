@@ -138,6 +138,16 @@ cat > "$PROJECT_PATH/.claude/settings.json" << 'SETTINGS_EOF'
 }
 SETTINGS_EOF
 
+# ── Step 4b: Create features.json (empty manifest for clean mode) ─────────────
+cat > "$PROJECT_PATH/.claude/features.json" << 'FEATURES_EOF'
+{
+  "schemaVersion": 1,
+  "installedBy": "claude-code-mastery-starter-kit",
+  "language": "none",
+  "features": {}
+}
+FEATURES_EOF
+
 # ── Step 5: Create CLAUDE.md + CLAUDE.local.md ────────────────────────────────
 progress "Creating CLAUDE.md files..."
 

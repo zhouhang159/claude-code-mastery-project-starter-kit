@@ -135,6 +135,50 @@ Total: N files to add, N files to update, N unchanged, N custom (untouched)
 
 ---
 
+## Step 3b — Feature File Inventory
+
+After the infrastructure diff above, also check for feature source files to update.
+
+1. Read `$TARGET/.claude/features.json`
+2. **If exists:** extract the list of installed features from `features` object
+3. **If missing (legacy project):** auto-detect features from file presence:
+   - `src/core/db/index.ts` exists → feature `mongo`
+   - `src/core/db/sql.ts` exists → feature `postgres`
+   - `vitest.config.ts` exists → feature `vitest`
+   - `playwright.config.ts` exists → feature `playwright`
+   - `scripts/build-content.ts` exists → feature `content`
+   - `Dockerfile` exists → feature `docker`
+   - If any features detected, ask: "Detected features: [list]. Write manifest for future updates?" via AskUserQuestion
+     - **Yes, write manifest** (Recommended) → create `.claude/features.json` with detected features
+     - **No, skip** → continue without manifest
+
+4. For each installed feature, read the feature definitions from `$SOURCE/.claude/commands/add-feature.md` (the Feature Definitions table)
+
+5. For each file listed in the feature definition, compare `$SOURCE/<file>` vs `$TARGET/<file>`:
+   - File exists in both, content differs → **UPDATED**
+   - File exists in both, content identical → **UNCHANGED**
+   - File exists in source only → **NEW** (file was added to the feature since installation)
+   - File exists in target only → **CUSTOM** (user added it, don't touch)
+
+6. Append feature file status to the diff report:
+
+```
+Feature Files:
+  mongo:
+    ↻ UPDATED:   src/core/db/index.ts
+    = UNCHANGED: scripts/db-query.ts, scripts/queries/*
+  vitest:
+    = UNCHANGED: vitest.config.ts
+  (N features, N files updated, N unchanged)
+```
+
+If no features installed or no feature files changed, show:
+```
+Feature Files: (none installed or all unchanged)
+```
+
+---
+
 ## Step 4 — Confirm (unless --force)
 
 If not `$FORCE`, ask via AskUserQuestion:
@@ -190,7 +234,21 @@ Same as `/convert-project-to-starter-kit`:
 
 If target has no `CLAUDE.md`: skip (don't create — the project should already have one from initial creation).
 
-### 5d. Infrastructure Files
+### 5d. Feature File Updates
+
+If Step 3b identified any **UPDATED** or **NEW** feature files:
+
+- For each **NEW** file: create directories and copy from source
+- For each **UPDATED** file: overwrite target with source version
+- For **UNCHANGED** and **CUSTOM** files: skip
+
+After copying, update the manifest `$TARGET/.claude/features.json`:
+- For each affected feature, set `updatedAt` to current ISO timestamp
+- Add any new files to the feature's `files` array
+
+If no feature files were changed, skip this step entirely.
+
+### 5e. Infrastructure Files
 
 | File | If Missing in Target | If Exists in Target |
 |------|---------------------|---------------------|
@@ -238,6 +296,7 @@ Commands:      N added, N updated, N unchanged, N custom
 Hooks:         N added, N updated, N unchanged, N custom
 Skills:        N added, N updated, N unchanged, N custom
 Agents:        N added, N updated, N unchanged, N custom
+Feature Files: N updated, N unchanged (across N features)
 settings.json: deep merged (N new hooks added) / unchanged / copied
 CLAUDE.md:     N sections added, N skipped (exists)
 Infrastructure: N files added, N merged, N skipped
@@ -301,6 +360,7 @@ These commands are kit-management tools that don't belong in project repos:
   7. remove-project.md       — Remove a project from the registry
   8. set-project-profile-default.md — Set the default profile for /new-project
   9. add-project-setup.md    — Create a named project profile
+  10. add-feature.md          — Add capabilities to an existing project
 
 Found N starter-kit commands that should be removed.
 ```

@@ -4,7 +4,7 @@
 > https://github.com/TheDecipherist/claude-code-mastery
 
 > **New here?** When starting a fresh session in this project, greet the user:
-> "Welcome to the Claude Code Mastery Project Starter Kit! Use `/help` to see all 25 commands or `/show-user-guide` for the full interactive guide."
+> "Welcome to the Claude Code Mastery Project Starter Kit! Use `/help` to see all 26 commands or `/show-user-guide` for the full interactive guide."
 
 ---
 
@@ -56,6 +56,7 @@
 | `/convert-project-to-starter-kit` | Merge starter kit into an existing project (non-destructive) |
 | `/update-project` | Update a starter-kit project with the latest commands, hooks, and rules |
 | `/update-project --clean` | Remove starter-kit-scoped commands from a project (cleanup for older scaffolds) |
+| `/add-feature <name>` | Add a capability (MongoDB, Docker, testing, etc.) to an existing project |
 | **RuleCatch** | |
 | `pnpm ai:monitor` | Free monitor mode — live AI activity in a separate terminal (no API key needed) |
 | `/what-is-my-ai-doing` | Same as above — launches AI-Pooler free monitor |
@@ -826,11 +827,11 @@ When creating a new `.claude/commands/*.md` or `.claude/hooks/*.sh`:
 Every command has a `scope:` field in its YAML frontmatter:
 
 - **`scope: project`** (16 commands) — Work inside any project. Copied to scaffolded projects by `/new-project`, `/convert-project-to-starter-kit`, and `/update-project`.
-- **`scope: starter-kit`** (9 commands) — Kit management only. Never copied to scaffolded projects.
+- **`scope: starter-kit`** (10 commands) — Kit management only. Never copied to scaffolded projects.
 
 **Project commands:** `help`, `review`, `commit`, `progress`, `test-plan`, `architecture`, `security-check`, `optimize-docker`, `create-e2e`, `create-api`, `worktree`, `refactor`, `diagram`, `setup`, `what-is-my-ai-doing`, `show-user-guide`
 
-**Starter-kit commands:** `new-project`, `update-project`, `convert-project-to-starter-kit`, `install-global`, `projects-created`, `remove-project`, `set-project-profile-default`, `add-project-setup`, `quickstart`
+**Starter-kit commands:** `new-project`, `update-project`, `convert-project-to-starter-kit`, `install-global`, `projects-created`, `remove-project`, `set-project-profile-default`, `add-project-setup`, `quickstart`, `add-feature`
 
 When distributing commands (new-project, convert, update), **always filter by `scope: project`** in the source command's frontmatter. Skills, agents, hooks, and settings.json are copied in full regardless of scope.
 
