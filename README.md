@@ -61,14 +61,14 @@ cd ~/projects/my-app               # Enter your new project
 pnpm install && pnpm dev           # Start building
 ```
 
-Use `/help` to see all 23 commands at any time.
+Use `/help` to see all 24 commands at any time.
 
 ## See It In Action
 
 | | |
 |---|---|
 | ![/help command](docs/screenshots/help-command.png) | ![/review violations](docs/screenshots/review-violations.png) |
-| **`/help`** &mdash; All 23 commands | **`/review`** &mdash; Catching violations with severity ratings |
+| **`/help`** &mdash; All 24 commands | **`/review`** &mdash; Catching violations with severity ratings |
 | ![Auto-branch hook](docs/screenshots/auto-branch.png) | ![Lint-on-save hook](docs/screenshots/hooks-lint-on-save.png) |
 | **Auto-Branching** &mdash; Hook blocks commits to main | **Lint-on-Save** &mdash; TypeScript errors caught instantly |
 | ![/diagram architecture](docs/screenshots/diagram-architecture.png) | ![/setup flow](docs/screenshots/setup-flow.png) |
@@ -82,7 +82,7 @@ Everything you need to start a Claude Code project the right way — security, a
 
 - **CLAUDE.md** — Battle-tested project instructions with 11 numbered critical rules for security, TypeScript, database wrappers, testing, and deployment
 - **Global CLAUDE.md** — Security gatekeeper for all projects. Never publish secrets, never commit .env files, standardized scaffolding rules
-- **23 Slash Commands** — `/help`, `/quickstart`, `/install-global`, `/setup`, `/diagram`, `/review`, `/commit`, `/progress`, `/test-plan`, `/architecture`, `/new-project`, `/security-check`, `/optimize-docker`, `/create-e2e`, `/create-api`, `/worktree`, `/what-is-my-ai-doing`, `/refactor`, `/set-project-profile-default`, `/add-project-setup`, `/projects-created`, `/remove-project`, `/convert-project-to-starter-kit`
+- **24 Slash Commands** — `/help`, `/quickstart`, `/install-global`, `/setup`, `/show-user-guide`, `/diagram`, `/review`, `/commit`, `/progress`, `/test-plan`, `/architecture`, `/new-project`, `/security-check`, `/optimize-docker`, `/create-e2e`, `/create-api`, `/worktree`, `/what-is-my-ai-doing`, `/refactor`, `/set-project-profile-default`, `/add-project-setup`, `/projects-created`, `/remove-project`, `/convert-project-to-starter-kit`
 - **9 Hooks** — Deterministic enforcement that always runs. Block secrets, lint on save, verify no credentials, branch protection, port conflicts, Rybbit pre-deploy gate, E2E test gate, env sync warnings, and RuleCatch monitoring (optional — skips silently if not installed)
 - **Skills** — Context-aware templates: systematic code review checklist and full microservice scaffolding
 - **Custom Agents** — Read-only code reviewer for security audits. Test writer that creates tests with explicit assertions
@@ -303,7 +303,8 @@ project/
 │   │   ├── add-project-setup.md  # /add-project-setup — create a named profile
 │   │   ├── projects-created.md   # /projects-created — list all created projects
 │   │   ├── remove-project.md     # /remove-project — remove a project from registry
-│   │   └── convert-project-to-starter-kit.md # /convert-project-to-starter-kit — merge into existing project
+│   │   ├── convert-project-to-starter-kit.md # /convert-project-to-starter-kit — merge into existing project
+│   │   └── show-user-guide.md    # /show-user-guide — open the User Guide in browser
 │   ├── skills/
 │   │   ├── code-review/SKILL.md # Triggered code review checklist
 │   │   └── create-service/SKILL.md # Service scaffolding template
@@ -325,6 +326,7 @@ project/
 │   ├── INFRASTRUCTURE.md        # Deployment details
 │   └── DECISIONS.md             # Architectural decision records
 ├── docs/                        # GitHub Pages site
+│   └── user-guide.html          # Interactive User Guide (HTML)
 ├── src/
 │   ├── core/db/index.ts         # Centralized database wrapper
 │   ├── handlers/                # Business logic
@@ -345,6 +347,7 @@ project/
 ├── global-claude-md/            # Copy to ~/.claude/ (one-time setup)
 │   ├── CLAUDE.md                # Global security gatekeeper
 │   └── settings.json            # Global hooks config
+├── USER_GUIDE.md                # Comprehensive User Guide (Markdown)
 ├── .env.example
 ├── .gitignore
 ├── .dockerignore

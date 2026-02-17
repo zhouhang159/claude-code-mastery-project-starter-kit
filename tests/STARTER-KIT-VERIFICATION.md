@@ -22,7 +22,7 @@ Before running this verification:
 
 > Verify the starter kit itself is complete before testing `/new-project`.
 
-### 1.1 Slash Commands (23 files)
+### 1.1 Slash Commands (24 files)
 
 ```bash
 ls -1 .claude/commands/
@@ -51,7 +51,8 @@ ls -1 .claude/commands/
 - [ ] `projects-created.md` exists
 - [ ] `remove-project.md` exists
 - [ ] `convert-project-to-starter-kit.md` exists
-- [ ] **Total: 23 files** (`ls .claude/commands/ | wc -l` = 23)
+- [ ] `show-user-guide.md` exists
+- [ ] **Total: 24 files** (`ls .claude/commands/ | wc -l` = 24)
 
 ### 1.2 Skills (2 directories)
 
@@ -195,6 +196,8 @@ ls -R tests/
 - [ ] `CLAUDE.md` exists
 - [ ] `CLAUDE.local.md` exists
 - [ ] `README.md` exists
+- [ ] `USER_GUIDE.md` exists
+- [ ] `docs/user-guide.html` exists
 - [ ] `content/getting-started.md` exists
 
 ---
@@ -1150,13 +1153,13 @@ ls .claude/commands/remove-project.md 2>/dev/null && echo "EXISTS" || echo "MISS
 - [ ] `projects-created.md` EXISTS
 - [ ] `remove-project.md` EXISTS
 
-### 18.4 Command Count is 23
+### 18.4 Command Count is 24
 
 ```bash
 ls .claude/commands/ | wc -l
 ```
 
-- [ ] Total: 23 files
+- [ ] Total: 24 files
 
 ### 18.5 New Profiles in Config
 
@@ -1178,11 +1181,12 @@ cat claude-mastery-project.conf
 
 - [ ] `help.md` lists `/set-project-profile-default` and `/add-project-setup`
 - [ ] `help.md` lists `/projects-created` and `/remove-project`
+- [ ] `help.md` lists `/show-user-guide`
 - [ ] `help.md` does NOT list `/set-clean-as-default` or `/reset-to-defaults`
-- [ ] `help.md` header says "23 commands"
+- [ ] `help.md` header says "24 commands"
 - [ ] `CLAUDE.md` quick reference has all new commands (including `/projects-created`, `/remove-project`, `/convert-project-to-starter-kit`)
-- [ ] `README.md` says "23 Slash Commands" and lists all new commands
-- [ ] `docs/index.html` says "23 Slash Commands" and has command cards for all new commands
+- [ ] `README.md` says "24 Slash Commands" and lists all new commands
+- [ ] `docs/index.html` says "24 Slash Commands" and has command cards for all new commands
 - [ ] "Supported Technologies" section in README.md
 - [ ] "Supported Technologies" section in docs/index.html
 - [ ] Project structure trees in README.md and docs/index.html include `projects-created.md`, `remove-project.md`, and `convert-project-to-starter-kit.md`
@@ -1230,7 +1234,7 @@ cd /tmp/test-convert && git log --oneline | head -5
 ls /tmp/test-convert/.claude/commands/ | wc -l
 ```
 
-- [ ] `.claude/commands/` has 23 files
+- [ ] `.claude/commands/` has 24 files
 
 ### 19.5 Verify Hooks Copied
 

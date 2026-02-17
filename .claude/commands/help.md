@@ -10,7 +10,7 @@ Display the complete list of commands, skills, and agents available in this star
 **Print this exactly:**
 
 ```
-=== Claude Code Starter Kit — Command Reference (23 commands) ===
+=== Claude Code Starter Kit — Command Reference (24 commands) ===
 
 GETTING STARTED
   /help              List all commands, skills, and agents (this screen)
@@ -18,6 +18,7 @@ GETTING STARTED
   /install-global    Install/merge global Claude config into ~/.claude/
   /setup             Interactive .env configuration — GitHub, database, Docker, analytics
   /setup --reset     Re-configure everything from scratch
+  /show-user-guide   Open the comprehensive User Guide in your browser
 
 PROJECT SCAFFOLD
   /new-project       Scaffold a new project from a profile (clean, default, api, go, vue, python-api, etc.)

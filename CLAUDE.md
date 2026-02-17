@@ -3,6 +3,9 @@
 > Based on Claude Code Mastery Guides V1-V5 by TheDecipherist
 > https://github.com/TheDecipherist/claude-code-mastery
 
+> **New here?** When starting a fresh session in this project, greet the user:
+> "Welcome to the Claude Code Mastery Project Starter Kit! Use `/help` to see all 24 commands or `/show-user-guide` for the full interactive guide."
+
 ---
 
 ## Quick Reference — Scripts
@@ -41,6 +44,7 @@
 | **Getting Started** | |
 | `/help` | List all commands, skills, and agents |
 | `/quickstart` | Interactive first-run walkthrough for new users |
+| `/show-user-guide` | Open the comprehensive User Guide in your browser |
 | **Setup** | |
 | `/install-global` | Install/merge global Claude config into `~/.claude/` (one-time, never overwrites) |
 | `/setup` | Interactive .env configuration — GitHub, database, Docker, analytics, RuleCatch |
@@ -598,6 +602,7 @@ project/
 │   ├── INFRASTRUCTURE.md  # Deployment & environment details
 │   └── DECISIONS.md       # Why we chose X over Y
 ├── docs/                  # GitHub Pages site
+│   └── user-guide.html   # Interactive User Guide (HTML)
 ├── src/
 │   ├── core/
 │   │   └── db/            # Centralized database wrapper
@@ -614,6 +619,7 @@ project/
 │   ├── build-content.ts   # Markdown → HTML article builder
 │   └── content.config.json # Article registry (source, output, SEO metadata)
 ├── content/               # Markdown source files for articles/posts
+├── USER_GUIDE.md          # Comprehensive User Guide (Markdown)
 ├── .env.example           # Template with placeholders (committed)
 ├── .env                   # Actual secrets (NEVER committed)
 ├── .gitignore
