@@ -252,7 +252,7 @@
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
             </div>
             <h3>Testing Templates</h3>
-            <p>Master test checklist, issue tracking log, and a singleton database wrapper that prevents connection pool explosion. All inputs are auto-sanitized against NoSQL injection.</p>
+            <p>Master test checklist, issue tracking log, and a singleton database wrapper that prevents connection pool explosion. Smart NoSQL injection sanitization allows safe operators while stripping dangerous ones.</p>
           </div>
 
           <div class="feature-card">
@@ -445,7 +445,7 @@ cp .claude/hooks/check-rulecatch.sh ~/.claude/hooks/</code></pre>
               <li>Run <code>/diagram all</code> &mdash; Auto-generate architecture, API, database, and infrastructure diagrams</li>
               <li>Edit <code>CLAUDE.local.md</code> &mdash; Add your personal preferences</li>
             </ol>
-            <p>The database wrapper (<code>src/core/db/index.ts</code>) works out of the box &mdash; just set <code>DATABASE_URL</code> in your <code>.env</code> and it connects to MongoDB automatically. All query inputs are auto-sanitized against NoSQL injection (configurable via <code>DB_SANITIZE_INPUTS=false</code> or <code>sanitize = false</code> in conf).</p>
+            <p>The database wrapper (<code>src/core/db/index.ts</code>) works out of the box &mdash; just set <code>DATABASE_URL</code> in your <code>.env</code> and it connects to MongoDB automatically. Smart NoSQL injection sanitization runs on all inputs: safe operators (<code>$gte</code>, <code>$in</code>, <code>$regex</code>, etc.) pass through while dangerous operators (<code>$where</code>, <code>$function</code>) are stripped. See the <a href="#database-wrapper">Database Wrapper</a> section for details.</p>
           </div>
         </div>
 
@@ -695,7 +695,7 @@ WRONG:   /api/users</code></pre>
             <ul>
               <li>NEVER create direct database connections outside <code>src/core/db/</code></li>
               <li>ALWAYS use the centralized database wrapper</li>
-              <li>All inputs auto-sanitized against NoSQL injection (disable with <code>DB_SANITIZE_INPUTS=false</code>)</li>
+              <li>Smart NoSQL injection sanitization: safe operators pass through, dangerous operators (<code>$where</code>, <code>$function</code>) stripped. Use <code>{ trusted: true }</code> for non-standard operators</li>
               <li>One connection pool. One place to change. One place to mock.</li>
             </ul>
           </div>
@@ -1471,6 +1471,79 @@ await bulkOps('sessions', [
           </table>
         </div>
 
+        <h3>Smart NoSQL Injection Sanitization</h3>
+        <p>All query inputs are automatically sanitized to prevent NoSQL injection. The sanitizer uses an <strong>allowlist</strong> of known-safe MongoDB query operators &mdash; standard operators pass through while dangerous ones are stripped.</p>
+
+        <div class="port-table-wrapper">
+          <table class="port-table">
+            <thead>
+              <tr><th>Category</th><th>Operators</th><th>What happens</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Safe (allowed)</strong></td>
+                <td><code>$gte</code>, <code>$lt</code>, <code>$in</code>, <code>$nin</code>, <code>$ne</code>, <code>$eq</code>, <code>$regex</code>, <code>$exists</code>, <code>$and</code>, <code>$or</code>, <code>$not</code>, <code>$nor</code>, <code>$elemMatch</code>, <code>$all</code>, <code>$size</code>, <code>$type</code>, <code>$expr</code>, <code>$text</code>, geo, bitwise</td>
+                <td>Key allowed through, value recursively sanitized</td>
+              </tr>
+              <tr>
+                <td><strong>Dangerous (stripped)</strong></td>
+                <td><code>$where</code>, <code>$function</code>, <code>$accumulator</code></td>
+                <td>Stripped automatically &mdash; these execute arbitrary JavaScript</td>
+              </tr>
+              <tr>
+                <td><strong>Unknown (stripped)</strong></td>
+                <td>Any unrecognized <code>$</code> key</td>
+                <td>Stripped as defense in depth</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>This means standard MongoDB queries <strong>just work</strong> without any special options:</p>
+
+        <pre class="language-typescript"><code class="language-typescript">// All of these work by default — no special options needed:
+const entries = await queryMany('logs', [
+  { $match: { timestamp: { $gte: new Date(since) } } },
+]);
+
+const total = await count('waf_events', { event_at: { $gte: sinceDate } });
+
+const latest = await queryOne('events', {
+  level: { $in: ['error', 'fatal'] },
+  timestamp: { $gte: cutoff },
+});
+
+// Dangerous operators are automatically stripped:
+// { $where: 'this.isAdmin' }     → stripped (JS execution)
+// { $function: { body: '...' } } → stripped (JS execution)</code></pre>
+
+        <p>Disable sanitization entirely with <code>DB_SANITIZE_INPUTS=false</code> in <code>.env</code> or <code>sanitize = false</code> in <code>claude-mastery-project.conf</code>.</p>
+
+        <h3><code>{ trusted: true }</code> &mdash; Escape Hatch</h3>
+        <p>If you need an operator not in the allowlist, <code>queryOne()</code>, <code>queryMany()</code>, and <code>count()</code> accept <code>{ trusted: true }</code> to skip sanitization entirely. This should be <strong>rare</strong> &mdash; if you use it frequently, add the operator to <code>SAFE_MONGO_OPERATORS</code> in <code>src/core/db/index.ts</code> instead.</p>
+
+        <pre class="language-typescript"><code class="language-typescript">// Only needed for operators NOT in the allowlist:
+const results = await queryMany('collection', pipeline, { trusted: true });
+const total = await count('collection', match, { trusted: true });
+const one = await queryOne('collection', match, { trusted: true });</code></pre>
+
+        <div class="check-before-grid" style="grid-template-columns: 1fr 1fr;">
+          <div class="check-before-card">
+            <h4>When to use <code>{ trusted: true }</code></h4>
+            <ul>
+              <li>Non-standard operators not in the allowlist</li>
+              <li>You validated/sanitized input yourself at a higher layer</li>
+            </ul>
+          </div>
+          <div class="check-before-card">
+            <h4>When NOT to use it</h4>
+            <ul>
+              <li>Standard MongoDB operators (<code>$gte</code>, <code>$in</code>, <code>$regex</code>, etc.) &mdash; these work by default</li>
+              <li>Raw user input flows directly into <code>$match</code> without validation</li>
+            </ul>
+          </div>
+        </div>
+
         <h3>Additional Features</h3>
         <ul>
           <li><strong>Singleton per URI</strong> &mdash; same URI always returns the same client, prevents pool exhaustion</li>
@@ -1480,6 +1553,7 @@ await bulkOps('sessions', [
           <li><strong>Graceful shutdown</strong> &mdash; <code>gracefulShutdown()</code> closes all pools on <code>SIGTERM</code>, <code>SIGINT</code>, <code>uncaughtException</code>, and <code>unhandledRejection</code> &mdash; no zombie connections on crash</li>
           <li><strong>E11000 auto-retry</strong> &mdash; handles concurrent upsert race conditions automatically</li>
           <li><strong>$limit before $lookup</strong> &mdash; <code>queryWithLookup()</code> enforces this for join performance</li>
+          <li><strong>Index management</strong> &mdash; <code>registerIndex()</code> + <code>ensureIndexes()</code> at startup</li>
         </ul>
 
         <h3>Test Query Master &mdash; <code>scripts/db-query.ts</code></h3>

@@ -210,7 +210,7 @@ cp .claude/hooks/check-rulecatch.sh ~/.claude/hooks/
 3. Run `/diagram all` — Auto-generate architecture, API, database, and infrastructure diagrams
 4. Edit `CLAUDE.local.md` — Add your personal preferences
 
-The database wrapper (`src/core/db/index.ts`) works out of the box — just set `DATABASE_URL` in your `.env` and it connects to MongoDB automatically. All query inputs are auto-sanitized against NoSQL injection (configurable via `DB_SANITIZE_INPUTS=false` or `sanitize = false` in conf).
+The database wrapper (`src/core/db/index.ts`) works out of the box — just set `DATABASE_URL` in your `.env` and it connects to MongoDB automatically. Smart NoSQL injection sanitization runs on all inputs: standard MongoDB operators (`$gte`, `$in`, `$regex`, etc.) pass through safely while dangerous operators (`$where`, `$function`) are stripped. See the [Database Wrapper](#database-wrapper--production-mongodb) section for details.
 
 ### 4. Start Building
 
@@ -442,7 +442,8 @@ Every API endpoint MUST use `/api/v1/` prefix. No exceptions.
 
 - NEVER create direct database connections outside `src/core/db/`
 - ALWAYS use the centralized database wrapper
-- All inputs auto-sanitized against NoSQL injection (disable with `DB_SANITIZE_INPUTS=false`)
+- Smart NoSQL injection sanitization: safe operators (`$gte`, `$in`, `$regex`) pass through, dangerous operators (`$where`, `$function`) are stripped
+- Use `{ trusted: true }` only for non-standard operators not in the allowlist (rare)
 - One connection pool. One place to change. One place to mock.
 
 ### Rule 4: Testing — Explicit Success Criteria
@@ -1054,11 +1055,61 @@ await bulkOps('sessions', [
 | `standard` | 10 | 2 | Default for most services |
 | `low` | 5 | 1 | Background workers, cron jobs |
 
+### Smart NoSQL Injection Sanitization
+
+All query inputs are automatically sanitized to prevent NoSQL injection. The sanitizer uses an **allowlist** of known-safe MongoDB query operators — standard operators pass through while dangerous ones are stripped.
+
+**How it works:**
+
+| Category | What happens |
+|----------|-------------|
+| **Safe operators** (`$gte`, `$lt`, `$in`, `$nin`, `$ne`, `$regex`, `$exists`, `$and`, `$or`, `$elemMatch`, `$expr`, geo, text, bitwise) | Key allowed through, value recursively sanitized |
+| **Dangerous operators** (`$where`, `$function`, `$accumulator` — execute arbitrary JS) | Stripped automatically |
+| **Unknown `$` keys** | Stripped (defense in depth) |
+| **Dot-notation keys** (`field.nested`) | Stripped (blocks path traversal) |
+
+```typescript
+// These all work by default — no special options needed:
+const entries = await queryMany('logs', [
+  { $match: { timestamp: { $gte: new Date(since) } } },
+]);
+
+const total = await count('waf_events', { event_at: { $gte: sinceDate } });
+
+const latest = await queryOne('events', {
+  level: { $in: ['error', 'fatal'] },
+  timestamp: { $gte: cutoff },
+});
+
+// Dangerous operators are automatically stripped:
+// { $where: 'this.isAdmin' }     → stripped (JS execution)
+// { $function: { body: '...' } } → stripped (JS execution)
+```
+
+**Disable entirely:** Set `DB_SANITIZE_INPUTS=false` in `.env` or `sanitize = false` in `claude-mastery-project.conf`.
+
+### `{ trusted: true }` — Escape Hatch
+
+If you need an operator not in the allowlist, `queryOne()`, `queryMany()`, and `count()` accept `{ trusted: true }` to skip sanitization entirely. This should be **rare** — if you find yourself using it frequently, add the operator to `SAFE_MONGO_OPERATORS` in `src/core/db/index.ts` instead.
+
+```typescript
+const results = await queryMany('collection', pipeline, { trusted: true });
+const total = await count('collection', match, { trusted: true });
+const one = await queryOne('collection', match, { trusted: true });
+```
+
+**When to use `{ trusted: true }`:**
+- The query uses a non-standard operator not in the allowlist
+- You have validated/sanitized the input yourself at a higher layer
+
+**When NOT to use it:**
+- Standard MongoDB operators (`$gte`, `$in`, `$regex`, etc.) — these work by default
+- Raw user input flows directly into `$match` values without validation
+
 ### Additional Features
 
 - **Singleton per URI** — same URI always returns the same client, prevents pool exhaustion
 - **Next.js hot-reload safe** — persists connections via `globalThis` during development
-- **NoSQL injection sanitization** — automatic on all inputs (configurable)
 - **Transaction support** — `withTransaction()` for multi-document atomic operations
 - **Change Stream access** — `rawCollection()` for real-time event processing
 - **Graceful shutdown** — `gracefulShutdown()` closes all pools on `SIGTERM`, `SIGINT`, `uncaughtException`, and `unhandledRejection` — no zombie connections on crash

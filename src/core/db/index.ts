@@ -13,7 +13,7 @@
  * - BulkWrite for all writes (atomic, performant)
  * - $limit BEFORE $lookup (critical for join performance)
  * - $inc for counters (no read-modify-write races)
- * - Automatic NoSQL injection sanitization on ALL inputs
+ * - Smart NoSQL injection sanitization (allows safe operators, blocks $where/$function)
  * - Graceful shutdown with closePool()
  * - Next.js hot-reload persistence via globalThis
  *
@@ -59,10 +59,43 @@ export function configureSanitization(enabled: boolean): void {
 }
 
 /**
+ * Known-safe MongoDB query operators. These are standard query/filter operators
+ * that do NOT execute arbitrary code. The sanitizer allows these through while
+ * still recursively sanitizing their values.
+ *
+ * Dangerous operators like $where, $function, $accumulator (which execute
+ * arbitrary JavaScript on the server) are NOT in this list and will be stripped.
+ */
+const SAFE_MONGO_OPERATORS = new Set([
+  // Comparison
+  '$eq', '$gt', '$gte', '$lt', '$lte', '$ne', '$in', '$nin',
+  // Logical
+  '$and', '$or', '$nor', '$not',
+  // Element
+  '$exists', '$type',
+  // Array
+  '$all', '$elemMatch', '$size',
+  // Regex
+  '$regex', '$options',
+  // Modulo
+  '$mod',
+  // Text search
+  '$text', '$search', '$language', '$caseSensitive', '$diacriticSensitive',
+  // Geospatial
+  '$geoWithin', '$geoIntersects', '$near', '$nearSphere',
+  '$geometry', '$maxDistance', '$minDistance', '$center', '$centerSphere', '$box', '$polygon',
+  // Bitwise
+  '$bitsAllClear', '$bitsAllSet', '$bitsAnyClear', '$bitsAnySet',
+  // Expression (aggregation expressions in $match)
+  '$expr',
+]);
+
+/**
  * Recursively sanitize an object to prevent NoSQL injection.
- * - Strips keys starting with `$` (blocks $gt, $ne, $where, $regex, etc.)
+ * - Allows known-safe MongoDB operators ($gte, $in, $regex, etc.) — values still sanitized
+ * - Strips dangerous operators ($where, $function, $accumulator — JS execution)
+ * - Strips unknown/unrecognized $ keys (defense in depth)
  * - Strips keys containing `.` (blocks path traversal like `field.nested`)
- * - Converts non-plain objects to strings (blocks prototype pollution)
  *
  * This runs automatically on all filter/match inputs before they touch MongoDB.
  * Internal operations (like $set, $inc in update operators) are NOT sanitized
@@ -90,14 +123,22 @@ function sanitize<T>(input: T): T {
     return input.map((item) => sanitize(item)) as unknown as T;
   }
 
-  // Plain objects — strip dangerous keys
+  // Plain objects — allow safe operators, strip dangerous ones
   const cleaned: Record<string, unknown> = {};
   for (const [key, value] of Object.entries(input as Record<string, unknown>)) {
-    // Block keys starting with $ (NoSQL operators from user input)
-    if (key.startsWith('$')) continue;
     // Block keys containing . (field path traversal)
     if (key.includes('.')) continue;
-    // Recursively sanitize nested values
+
+    if (key.startsWith('$')) {
+      if (SAFE_MONGO_OPERATORS.has(key)) {
+        // Known safe operator — keep key, recursively sanitize value
+        cleaned[key] = sanitize(value);
+      }
+      // Unknown/dangerous $ key ($where, $function, etc.) — strip it
+      continue;
+    }
+
+    // Regular field — recursively sanitize value
     cleaned[key] = sanitize(value);
   }
   return cleaned as T;
@@ -283,13 +324,17 @@ export async function getCollection<T extends Document>(
 /**
  * Find a single document by filter.
  * Uses aggregation with automatic $limit: 1.
+ *
+ * Pass `{ trusted: true }` when the match filter is server-constructed
+ * and uses MongoDB operators ($gte, $in, $regex, etc.).
  */
 export async function queryOne<T extends Document>(
   collection: string,
-  match: Filter<T>
+  match: Filter<T>,
+  options?: { trusted?: boolean },
 ): Promise<T | null> {
   const db = await getDb();
-  const safeMatch = sanitize(match);
+  const safeMatch = options?.trusted ? match : sanitize(match);
   const results = await db
     .collection<T>(collection)
     .aggregate<T>([{ $match: safeMatch }, { $limit: 1 }])
@@ -300,13 +345,17 @@ export async function queryOne<T extends Document>(
 /**
  * Find multiple documents using an aggregation pipeline.
  * Always use this over .find() for consistency.
+ *
+ * Pass `{ trusted: true }` when the pipeline is server-constructed
+ * and uses MongoDB operators ($gte, $in, $regex, etc.) in $match stages.
  */
 export async function queryMany<T extends Document>(
   collection: string,
-  pipeline: Document[]
+  pipeline: Document[],
+  options?: { trusted?: boolean },
 ): Promise<T[]> {
   const db = await getDb();
-  const safePipeline = sanitizePipeline(pipeline);
+  const safePipeline = options?.trusted ? pipeline : sanitizePipeline(pipeline);
   return db.collection<T>(collection).aggregate<T>(safePipeline).toArray();
 }
 
@@ -350,13 +399,17 @@ export async function queryWithLookup<T extends Document>(
 /**
  * Count documents in a collection.
  * Uses aggregation $count for consistency.
+ *
+ * Pass `{ trusted: true }` when the match filter is server-constructed
+ * and uses MongoDB operators ($gte, $in, $regex, etc.).
  */
 export async function count(
   collection: string,
-  match: Filter<Document> = {}
+  match: Filter<Document> = {},
+  options?: { trusted?: boolean },
 ): Promise<number> {
   const db = await getDb();
-  const safeMatch = sanitize(match);
+  const safeMatch = options?.trusted ? match : sanitize(match);
   const result = await db
     .collection(collection)
     .aggregate<{ count: number }>([{ $match: safeMatch }, { $count: 'count' }])

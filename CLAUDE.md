@@ -106,8 +106,11 @@ Every API endpoint MUST use `/api/v1/` prefix. No exceptions.
 - NEVER import `mongodb` directly in any file except `src/core/db/index.ts`
 - NEVER use `mongoose` or any ODM — native MongoDB driver only
 - ALWAYS import from `src/core/db/` for all database operations
-- All query inputs are automatically sanitized against NoSQL injection (enabled by default)
-- To disable sanitization: set `DB_SANITIZE_INPUTS=false` in `.env` or `sanitize = false` in `claude-mastery-project.conf`
+- Smart NoSQL injection sanitization runs on ALL query inputs (enabled by default)
+  - Known-safe operators (`$gte`, `$in`, `$regex`, `$lt`, `$ne`, etc.) pass through — values still sanitized recursively
+  - Dangerous operators (`$where`, `$function`, `$accumulator`) are stripped automatically
+  - Unknown/unrecognized `$` keys are stripped (defense in depth)
+- To disable sanitization entirely: set `DB_SANITIZE_INPUTS=false` in `.env` or `sanitize = false` in `claude-mastery-project.conf`
 - Programmatic toggle: `configureSanitization(false)` — only if you handle sanitization yourself
 
 #### How to use the wrapper
@@ -144,6 +147,44 @@ const userWithOrders = await queryWithLookup<UserWithOrders>('users', {
 // Count
 const total = await count('users', { role: 'admin' });
 ```
+
+#### Smart sanitization — safe operators just work
+
+The sanitizer uses an **allowlist** of known-safe MongoDB query operators. Standard operators like `$gte`, `$in`, `$regex`, `$lt`, `$ne`, `$exists` pass through automatically — their values are still recursively sanitized for defense in depth. Dangerous operators (`$where`, `$function`, `$accumulator`) that execute arbitrary JavaScript are stripped.
+
+```typescript
+// These all work by default — no special options needed:
+const entries = await queryMany('logs', [
+  { $match: { timestamp: { $gte: new Date(since) } } },
+]);
+
+const total = await count('waf_events', { event_at: { $gte: sinceDate } });
+
+const latest = await queryOne('events', {
+  level: { $in: ['error', 'fatal'] },
+  timestamp: { $gte: cutoff },
+});
+
+// Dangerous operators are automatically stripped:
+// { $where: 'this.isAdmin' }     → stripped (JS execution)
+// { $function: { body: '...' } } → stripped (JS execution)
+// { $accumulator: { ... } }      → stripped (JS execution)
+```
+
+**Allowed operator categories:** comparison (`$eq`, `$gt`, `$gte`, `$lt`, `$lte`, `$ne`, `$in`, `$nin`), logical (`$and`, `$or`, `$nor`, `$not`), element (`$exists`, `$type`), array (`$all`, `$elemMatch`, `$size`), regex (`$regex`, `$options`), text search (`$text`, `$search`), geospatial (`$near`, `$geoWithin`, etc.), bitwise, and `$expr`.
+
+#### `{ trusted: true }` — Escape hatch for edge cases
+
+If you need an operator not in the allowlist, `queryOne()`, `queryMany()`, and `count()` accept `{ trusted: true }` to skip sanitization entirely. This should be rare — if you find yourself using it frequently, consider adding the operator to `SAFE_MONGO_OPERATORS` in `src/core/db/index.ts` instead.
+
+```typescript
+// Only needed for operators NOT in the allowlist:
+const results = await queryMany('collection', pipeline, { trusted: true });
+const total = await count('collection', match, { trusted: true });
+const one = await queryOne('collection', match, { trusted: true });
+```
+
+**Important:** NEVER use `{ trusted: true }` if raw user input flows directly into `$match` values without validation.
 
 #### Writing data — ALWAYS use bulkWrite
 
